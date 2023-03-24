@@ -1,6 +1,7 @@
 import React from 'react';
 import './Profile.scss';
 import Container from '../../Components/Container/Container';
+import UserList from '../../Components/UserList/UserList';
 import Button from '../../Components/Button/Button';
 import imgGuest from '../../images/profile/1.jpg';
 import { useState } from 'react';
@@ -148,6 +149,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
+        <UserList />
       </Container>
     </>
   );

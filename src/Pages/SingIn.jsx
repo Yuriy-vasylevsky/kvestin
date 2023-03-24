@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from '../Components/Form/Form';
+import { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../redux/auth/auth-slices';
@@ -10,10 +11,10 @@ import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import {
   collection,
   addDoc,
-
+  getDocs,
   // query,
   // orderBy,
-  // onSnapshot,
+  onSnapshot,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -22,6 +23,7 @@ export default function SingIn() {
   const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
+  // const [userlist, setUserList] = useState([]);
 
   const onClickForm = (email, password, e) => {
     e.preventDefault();
@@ -73,18 +75,29 @@ export default function SingIn() {
   //     });
   // };
 
-  const hendelLoginGoogle = async () => {
+  const hendelSingGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+      const userRef = collection(db, 'users');
 
-      // const db = getFirestore(app);
-      const messagesRef = collection(db, 'user');
+      const querySnapshot = await getDocs(userRef);
+      const allUser = querySnapshot.docs.map(doc => doc.data());
+      const allEmails = allUser.map(user => user.userEmail);
+      // setUserList(allEmails);
 
-      await addDoc(messagesRef, {
-        userEmail: user.email,
-        id: user.uid,
-      });
+      if (allEmails.includes(user.email)) {
+        console.log('Цей користувач уже зареєстрований');
+      } else {
+        console.log('Новий користувач');
+        await addDoc(userRef, {
+          userEmail: user.email,
+          id: user.uid,
+          name: user.displayName,
+          photo: user.photoURL,
+          token: user.accessToken,
+        });
+      }
 
       dispatch(
         setUser({
@@ -105,14 +118,14 @@ export default function SingIn() {
   return (
     <div>
       <Form title={'Увійти'} onClickForm={onClickForm}>
-        <Link to="/login" className="link">
+        <Link to="/sing" className="link">
           <Button
             title={'Немає акаунта?'}
             clasName={'formBtn'}
             type={'button'}
           />
           <Button
-            onClick={hendelLoginGoogle}
+            onClick={hendelSingGoogle}
             title={'Увійти з Google'}
             clasName={'formBtn'}
             type={'button'}

@@ -31,13 +31,16 @@ const Chat = () => {
   };
 
   useEffect(() => {
+    //ccилка на колекцію данних
     const messagesRef = collection(db, 'messages');
     const q = query(messagesRef, orderBy('createdAt'));
+
     const unsubscribe = onSnapshot(q, querySnapshot => {
       const messageList = querySnapshot.docs.map(doc => ({
         ...doc.data(),
         id: doc.id,
       }));
+
       setMessageList(messageList);
     });
 

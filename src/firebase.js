@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+import { getFunctions } from 'firebase/functions';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCV4Ld8CXpgCtbiGTPe5_MCWD5_HKWtkKs',
@@ -22,15 +22,14 @@ const database = getDatabase(app);
 const auth = getAuth(app);
 const functions = getFunctions(app);
 
-const getAllUsers = httpsCallable(functions, 'getAllUsers');
-
-getAllUsers()
-  .then(result => {
-    console.log(result); // Відображаємо список користувачів у консолі
-  })
-  .catch(error => {
-    console.log(error); // Відображаємо помилку у консолі
-  });
+// const getAllUsers = httpsCallable(functions, 'getAllUsers');
+// getAllUsers()
+//   .then(result => {
+//     console.log(result.data); // Відображаємо список користувачів у консолі
+//   })
+//   .catch(error => {
+//     console.log(error); // Відображаємо помилку у консолі
+//   });
 
 // const header = new Headers({
 //   'Access-Control-Allow-Origin': ' http://localhost:3000',
@@ -48,4 +47,4 @@ getAllUsers()
 //     console.log('error:', error);
 //   });
 
-export { db, app, database, auth };
+export { db, app, database, auth, functions };

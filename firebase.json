@@ -2,11 +2,7 @@
   "functions": [
     {
       "source": "functions",
-      "codebase": "default"
-    },
-    {
-      "source": "q",
-      "codebase": "q",
+      "codebase": "default",
       "ignore": [
         "node_modules",
         ".git",
@@ -24,11 +20,7 @@
   },
   "hosting": {
     "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
