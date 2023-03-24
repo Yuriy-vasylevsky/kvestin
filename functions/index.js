@@ -7,13 +7,12 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
   response.send('ЗАЄБАЛО');
 });
 
-exports.getAllUsers = functions.https.onRequest((req, res) => {
+exports.getAllUsers = functions.https.onCall((req, res) => {
   // Використовуємо Firebase Admin SDK для отримання списку всіх користувачів
   admin
     .auth()
     .listUsers()
     .then(userRecords => {
-      console.log('userRecords:', userRecords);
       // const users = userRecords.map(userRecord => {
       //   return {
       //     uid: userRecord.uid,
