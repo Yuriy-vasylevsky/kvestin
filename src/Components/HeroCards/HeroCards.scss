@@ -1,0 +1,35 @@
+.cards-hero {
+  width: 200px;
+  height: 275px;
+
+  background: #23252b;
+  box-shadow: -4px 4px 18px rgba(0, 0, 0, 0.43);
+  border-radius: 10px;
+  margin-top: 20px;
+
+  @media screen and (max-width: 480px) {
+    max-width: 150px;
+    height: 260px;
+  }
+
+  &__text {
+    padding-top: 15px;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #ffffff;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+.cards-hero__img img {
+  object-fit: cover;
+  max-height: 170px;
+  // object-position: -1px -1px;
+}
+
+.position__img img {
+  object-position: -1px -1px;
+}

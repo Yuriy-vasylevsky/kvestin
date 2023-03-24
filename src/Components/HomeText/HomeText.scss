@@ -1,0 +1,43 @@
+.top {
+  background: #212428;
+
+  &_text {
+    font-size: 15px;
+    line-height: 1.1;
+    margin-top: 10px;
+
+    color: #989ca2;
+    overflow: hidden;
+    // max-height: 100px;
+  }
+
+  &__title {
+    padding-top: 20px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.5;
+    // text-transform: capitalize;
+    color: #cedff6;
+    text-align: center;
+    padding-bottom: 15px;
+  }
+}
+
+.top-button {
+  margin-top: 15px;
+}
+
+.button {
+  position: relative;
+  z-index: 100;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  background: #212428;
+  border: 1px solid #ff014f;
+  box-sizing: border-box;
+  border-radius: 30px;
+  padding: 5px 15px 5px 15px;
+  color: aliceblue;
+}

@@ -1,0 +1,9 @@
+.hero {
+  display: flex;
+  justify-content: space-around;
+  //   margin-top: 20px;
+
+  @media screen and (max-width: 900px) {
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,31 @@
+.button {
+  position: relative;
+  z-index: 100;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  background: #212428;
+  border: 1px solid #ff014f;
+  box-sizing: border-box;
+  border-radius: 30px;
+  padding: 5px 15px 5px 15px;
+  color: aliceblue;
+  cursor: pointer;
+}
+
+.formBtn {
+  margin-top: 20px;
+  background: #ff014f;
+  border-bottom: 4px solid #ff014f;
+  color: white;
+  font-size: 14px;
+  display: block;
+  width: 100%;
+  padding: 0 20px;
+  line-height: 40px;
+  border-width: 0;
+  border-radius: 20px;
+  cursor: pointer;
+  text-decoration: none;
+}
