@@ -1,0 +1,89 @@
+.input-field {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  margin-right: 10px;
+}
+
+.send-button {
+  background-color: #008cba;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.send-button:hover {
+  background-color: #005e7d;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 700px;
+  overflow-x: scroll;
+}
+
+.my-message {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-left: auto;
+  align-items: center;
+  border-radius: 20px;
+  max-width: 60%;
+  margin-bottom: 10px;
+}
+
+.user-message {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+  border-radius: 20px;
+  max-width: 60%;
+  margin-bottom: 10px;
+}
+
+.message__user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.my-message .message__user {
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+.message__user-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.message__user-name {
+  font-weight: bold;
+  font-size: 16px;
+  color: var(--main-text-color);
+  margin-top: 5px;
+  text-align: center;
+  // max-width: 100px;
+  // min-width: 100px;
+  width: 100px;
+}
+
+.message__text {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  // height: 30px;
+  flex-direction: column;
+  background-color: #f2f2f2;
+  min-width: 100px;
+  border-radius: 30px;
+  padding: 15px;
+}

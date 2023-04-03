@@ -1,18 +1,9 @@
-import React, { useState, useEffect } from 'react';
-// import { collection, getDocs } from 'firebase/firestore';
+import React, { useState, useEffect, useRef } from 'react';
 import { db } from '../../firebase';
 import s from './UserList.module.scss';
 import imgGuest from '../../images/profile/1.jpg';
 import Button from '../../Components/Button/Button';
-// import {
-//   collection,
-//   addDoc,
-//   getDocs,
-//   // serverTimestamp,
-//   // query,
-//   // orderBy,
-//   // onSnapshot,
-// } from 'firebase/firestore';
+import PrivateChat from '../../Components/PrivateChat/PrivateChat';
 import {
   getFirestore,
   collection,
@@ -29,10 +20,11 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const UserList = () => {
   const currentUser = useSelector(state => state.user);
-
+  const chatContainerRef = useRef(null);
   const [users, setUsers] = useState([]);
   const [chatId, setChatId] = useState('');
-  console.log('chatId:', chatId);
+  const [otherUserEmail, setOtherUserEmail] = useState('');
+
   useEffect(() => {
     const getUsers = async () => {
       const userRef = collection(db, 'users');
@@ -43,6 +35,14 @@ const UserList = () => {
 
     getUsers();
   }, []);
+
+  useEffect(() => {
+    const chatContainer = chatContainerRef.current;
+    console.log('chatContainer:', chatContainer);
+
+    // Автоматичний скролінг до найновішого повідомлення
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  });
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   const chatsRef = collection(db, 'chats');
   // const usersRef = collection(db, 'users');
@@ -83,40 +83,42 @@ const UserList = () => {
     if (!querySnapshot.empty) {
       const chatId = querySnapshot.docs[0].id;
       setChatId(chatId);
-
+      setOtherUserEmail(otherUser.userEmail);
       console.log('чат уже є');
       return chatId;
     } else {
       console.log('создали новий чат');
       const chatId = `${currentUser.id}_${otherUser.id}`;
       await setDoc(doc(chatsRef, chatId), {
-        // users: {
-        //   [currentUser.id]: true,
-        //   [otherUser.id]: true,
-        // },
+        users: {
+          [currentUser.id]: true,
+          [otherUser.id]: true,
+        },
       });
       setChatId(chatId);
+
       return chatId;
     }
   };
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   //
 
-  const sendMessage = async message => {
-    const chatRef = doc(chatsRef, chatId);
+  // const sendMessage = async message => {
+  //   const chatRef = doc(chatsRef, chatId);
 
-    // додаємо новий документ у колекцію повідомлень чату
-    await addDoc(collection(chatRef, 'messages'), {
-      // sender: {
-      //   uid: sender.id,
-      //   // name: sender.displayName,
-      //   // photo: sender.photoURL,
-      // },
-      message,
-      timestamp: serverTimestamp(),
-    });
-  };
+  //   // додаємо новий документ у колекцію повідомлень чату
+  //   await addDoc(collection(chatRef, 'messages'), {
+  //     // sender: {
+  //     //   uid: sender.id,
+  //     //   // name: sender.displayName,
+  //     //   // photo: sender.photoURL,
+  //     // },
+  //     text: message,
+  //     timestamp: serverTimestamp(),
+  //   });
+  // };
 
   //
   //
@@ -155,12 +157,19 @@ const UserList = () => {
           </li>
         ))}
       </ul>
-      <Button
+      <ul className={s.chat__list} ref={chatContainerRef}>
+        {chatId ? (
+          <PrivateChat chatId={chatId} otherUserEmail={otherUserEmail} />
+        ) : (
+          <h1> Приватний чат</h1>
+        )}
+      </ul>
+      {/* <Button
         onClick={() => sendMessage('hrthehh')}
         title={'Semd message'}
         clasName={'userlistBtn'}
         type={'button'}
-      />
+      /> */}
     </div>
   );
 };
