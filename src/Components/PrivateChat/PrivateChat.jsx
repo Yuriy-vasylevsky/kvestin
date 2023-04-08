@@ -18,6 +18,7 @@ function PrivateChat({ chatId, otherUserEmail }) {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const { photo, name, email } = useSelector(state => state.user);
+  const chatRef = useRef(null);
 
   const sendMessage = async () => {
     const chatsRef = collection(db, 'chats');
@@ -34,6 +35,15 @@ function PrivateChat({ chatId, otherUserEmail }) {
 
     setMessage('');
   };
+
+  function scrollToBottom() {
+    chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    console.log('chatRef.current.scrollTop:', chatRef.current.scrollTop);
+  }
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     const chatsRef = collection(db, 'chats');
@@ -57,7 +67,7 @@ function PrivateChat({ chatId, otherUserEmail }) {
       <h1> Чат з {otherUserEmail}</h1>
 
       <div className="chat-container">
-        <div className="message-container">
+        <div className="message-container" ref={chatRef}>
           {messages.map(
             ({ id, text, photo, userEmail, userName, createdAt }) => (
               <div

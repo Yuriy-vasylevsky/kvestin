@@ -24,6 +24,12 @@ const UserList = () => {
   const [users, setUsers] = useState([]);
   const [chatId, setChatId] = useState('');
   const [otherUserEmail, setOtherUserEmail] = useState('');
+  const chatRef = useRef(null);
+
+  function scrollToBottom() {
+    chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    console.log('chatRef.current.scrollTop:', chatRef.current.scrollTop);
+  }
 
   useEffect(() => {
     const getUsers = async () => {
@@ -37,12 +43,9 @@ const UserList = () => {
   }, []);
 
   useEffect(() => {
-    const chatContainer = chatContainerRef.current;
-    console.log('chatContainer:', chatContainer);
+    scrollToBottom();
+  }, []);
 
-    // Автоматичний скролінг до найновішого повідомлення
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  });
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   const chatsRef = collection(db, 'chats');
   // const usersRef = collection(db, 'users');
@@ -157,7 +160,7 @@ const UserList = () => {
           </li>
         ))}
       </ul>
-      <ul className={s.chat__list} ref={chatContainerRef}>
+      <ul className={s.chat__list} ref={chatRef}>
         {chatId ? (
           <PrivateChat chatId={chatId} otherUserEmail={otherUserEmail} />
         ) : (
