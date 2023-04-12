@@ -2,33 +2,37 @@
 import s from './HomePage.module.scss';
 import { HeroCards } from '../../Components/HeroCards/HeroCards';
 import { HomeText } from '../../Components/HomeText/HomeText';
+import UserList from '../../Components/UserList/UserList';
 import Container from '../../Components/Container/Container';
 import img1 from '../../images/main1.png';
 import img2 from '../../images/main2.png';
 import img3 from '../../images/main3.jpg';
 import img4 from '../../images/main4.jpg';
 // import { useNavigate } from 'react-router-dom';
-// import { useEffect } from 'react';
-// import { auth } from '../../firebase';
+import { useEffect } from 'react';
+import { auth } from '../../firebase';
+import { useState } from 'react';
 
 export default function HomePage() {
   // const navigate = useNavigate();
+  const [isAuth, setIsAuth] = useState(false);
 
-  // useEffect(() => {
-  //   auth.onAuthStateChanged(user => {
-  //     if (user) {
-  //       return;
-  //     } else {
-  //       navigate('sing');
-  //     }
-  //   });
-  // });
+  useEffect(() => {
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        return setIsAuth(true);
+      } else {
+        return setIsAuth(false);
+      }
+    });
+  });
 
   return (
     <>
       <main className="main">
-        {/* <UserList></UserList> */}
         <Container>
+          {/* {isAuth && <UserList />} */}
+
           <section className="top">
             <HomeText />
           </section>

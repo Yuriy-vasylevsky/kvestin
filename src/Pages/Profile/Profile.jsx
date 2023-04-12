@@ -1,27 +1,28 @@
 import React from 'react';
 import './Profile.scss';
 import Container from '../../Components/Container/Container';
-import UserList from '../../Components/UserList/UserList';
+import FriendsList from '../../Components/FriendsList/FriendsList';
 import Button from '../../Components/Button/Button';
+
+import MagikCard from '../../Components/MagikCard/MagikCard';
 import imgGuest from '../../images/profile/1.jpg';
-import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import { useState, useEffect } from 'react';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { auth } from '../../firebase';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../../redux/auth/auth-slices';
-// import admin from '../../firebase-admin';
 
 const Profile = () => {
-  const dispatch = useDispatch();
   const [newName, setNewName] = useState('');
   const [newLabelName, setNewLabelName] = useState('Вибрати фото');
   const [file, setFile] = useState('');
   const [currentUser, setCurrentUser] = useState('');
+
+  const dispatch = useDispatch();
   const user = useSelector(state => state.user);
-  // const user = useSelector(state => state.user);
+
   const navigate = useNavigate();
   const auth = getAuth();
   const storage = getStorage();
@@ -41,7 +42,6 @@ const Profile = () => {
 
     updateProfile(currentUser, {
       displayName: newName,
-      //   photoURL: '',
     })
       .then(() => {
         setNewName('');
@@ -59,7 +59,6 @@ const Profile = () => {
     e.preventDefault();
 
     const storageRef = ref(storage, 'myFiles/' + file.name);
-    // setNewLabelName(file.name);
     uploadBytes(storageRef, file)
       .then(() => {
         getDownloadURL(storageRef).then(url => {
@@ -74,7 +73,7 @@ const Profile = () => {
           });
         });
         setNewLabelName('Завантажити');
-        console.log('Файл успішно завантажено на Firebase Storage');
+        return toast('Файл успішно завантажено на Firebase Storage');
       })
 
       .catch(error => {
@@ -149,8 +148,10 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        <UserList />
+        <FriendsList />
+        {/* <MagikCard /> */}
       </Container>
+      <ToastContainer />
     </>
   );
 };

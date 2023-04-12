@@ -1,21 +1,16 @@
 import React from 'react';
 import Form from '../Components/Form/Form';
-import { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import Button from '../Components/Button/Button';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../redux/auth/auth-slices';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import Button from '../Components/Button/Button';
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { useNavigate, Link } from 'react-router-dom';
 import {
-  collection,
-  addDoc,
-  getDocs,
-  // query,
-  // orderBy,
-  onSnapshot,
-} from 'firebase/firestore';
+  signInWithPopup,
+  GoogleAuthProvider,
+  getAuth,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 
 export default function SingIn() {
@@ -23,7 +18,6 @@ export default function SingIn() {
   const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
-  // const [userlist, setUserList] = useState([]);
 
   const onClickForm = (email, password, e) => {
     e.preventDefault();
@@ -48,33 +42,6 @@ export default function SingIn() {
       });
   };
 
-  // const hendelLoginGoogle = () => {
-  //   signInWithPopup(auth, provider)
-  //     .then(({ user }) => {
-  //       const messagesRef = collection(db, 'user');
-  //       console.log('messagesRef:', messagesRef);
-
-  //       addDoc(messagesRef, {
-  //         userEmail: user.email,
-  //       });
-
-  //       dispatch(
-  //         setUser({
-  //           email: user.email,
-  //           token: user.accessToken,
-  //           id: user.uid,
-  //           name: user.displayName,
-  //           photo: user.photoURL,
-  //         }),
-  //       );
-
-  //       navigate('/');
-  //     })
-  //     .catch(error => {
-  //       console.log('error:', error);
-  //     });
-  // };
-
   const hendelSingGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
@@ -84,7 +51,6 @@ export default function SingIn() {
       const querySnapshot = await getDocs(userRef);
       const allUser = querySnapshot.docs.map(doc => doc.data());
       const allEmails = allUser.map(user => user.userEmail);
-      // setUserList(allEmails);
 
       if (allEmails.includes(user.email)) {
         console.log('Цей користувач уже зареєстрований');
@@ -118,19 +84,19 @@ export default function SingIn() {
   return (
     <div>
       <Form title={'Увійти'} onClickForm={onClickForm}>
-        <Link to="/sing" className="link">
+        <Link to="/login" className="link">
           <Button
             title={'Немає акаунта?'}
             clasName={'formBtn'}
             type={'button'}
           />
-          <Button
-            onClick={hendelSingGoogle}
-            title={'Увійти з Google'}
-            clasName={'formBtn'}
-            type={'button'}
-          />
         </Link>
+        <Button
+          onClick={hendelSingGoogle}
+          title={'Увійти з Google'}
+          clasName={'formBtn'}
+          type={'button'}
+        />
       </Form>
     </div>
   );

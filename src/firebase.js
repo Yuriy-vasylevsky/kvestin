@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
-import { getFunctions } from 'firebase/functions';
+// import { getFunctions } from 'firebase/functions';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCV4Ld8CXpgCtbiGTPe5_MCWD5_HKWtkKs',
@@ -20,7 +20,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const database = getDatabase(app);
 const auth = getAuth(app);
-const functions = getFunctions(app);
+// const functions = getFunctions(app);
 
 // const getAllUsers = httpsCallable(functions, 'getAllUsers');
 // getAllUsers()
@@ -47,4 +47,4 @@ const functions = getFunctions(app);
 //     console.log('error:', error);
 //   });
 
-export { db, app, database, auth, functions };
+export { db, app, database, auth };

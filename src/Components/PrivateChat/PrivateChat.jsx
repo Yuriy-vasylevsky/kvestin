@@ -13,18 +13,22 @@ import {
 import { db } from '../../firebase';
 import './PrivateChat.scss';
 import imgGuest from '../../images/profile/1.jpg';
+// import { Navigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
-function PrivateChat({ chatId, otherUserEmail }) {
+function PrivateChat({ chatId, otherUserEmail, questions }) {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  // const [currentQuestions, setCurrentQuestions] = useState([]);
   const { photo, name, email } = useSelector(state => state.user);
-  const chatRef = useRef(null);
+  const chatContainerRef = useRef(null);
+  // const navigate = useNavigate();
+
+  const chatsRef = collection(db, 'chats');
+  const chatRef = doc(chatsRef, chatId);
+  const messagesRef = collection(chatRef, 'messages');
 
   const sendMessage = async () => {
-    const chatsRef = collection(db, 'chats');
-    const chatRef = doc(chatsRef, chatId);
-    const messagesRef = collection(chatRef, 'messages');
-
     await addDoc(messagesRef, {
       text: message,
       createdAt: serverTimestamp(),
@@ -36,14 +40,33 @@ function PrivateChat({ chatId, otherUserEmail }) {
     setMessage('');
   };
 
+  const sendQuestions = async () => {
+    await addDoc(messagesRef, {
+      text: questions,
+      createdAt: serverTimestamp(),
+      photo,
+      userName: name,
+      userEmail: email,
+    });
+
+    // setMessage('');
+  };
+
   function scrollToBottom() {
-    chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    console.log('chatRef.current.scrollTop:', chatRef.current.scrollTop);
+    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
   }
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // useEffect(() => {
+  //   if (chatId) {
+  //     return;
+  //   } else {
+  //     navigate('/');
+  //   }
+  // }, [messages]);
 
   useEffect(() => {
     const chatsRef = collection(db, 'chats');
@@ -64,10 +87,10 @@ function PrivateChat({ chatId, otherUserEmail }) {
 
   return (
     <>
-      <h1> Чат з {otherUserEmail}</h1>
+      <h1> Чат з {otherUserEmail && otherUserEmail}</h1>
 
       <div className="chat-container">
-        <div className="message-container" ref={chatRef}>
+        <div className="message-container" ref={chatContainerRef}>
           {messages.map(
             ({ id, text, photo, userEmail, userName, createdAt }) => (
               <div
@@ -102,11 +125,14 @@ function PrivateChat({ chatId, otherUserEmail }) {
           value={message}
           onChange={e => setMessage(e.target.value)}
         />
-        {
-          <button onClick={sendMessage} className="send-button">
-            Send
-          </button>
-        }
+
+        <button onClick={sendMessage} className="send-button">
+          Send
+        </button>
+
+        <button onClick={sendQuestions} className="send-button">
+          Send
+        </button>
       </div>
     </>
   );

@@ -1,39 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase';
 import s from './UserList.module.scss';
 import imgGuest from '../../images/profile/1.jpg';
 import Button from '../../Components/Button/Button';
-import PrivateChat from '../../Components/PrivateChat/PrivateChat';
+import { setUserIdR } from '../../redux/friends/friends-slice';
 import {
-  getFirestore,
   collection,
   doc,
   addDoc,
-  setDoc,
   where,
   query,
   getDocs,
-  limit,
-  serverTimestamp,
 } from 'firebase/firestore';
 import { useSelector, useDispatch } from 'react-redux';
 
 const UserList = () => {
   const currentUser = useSelector(state => state.user);
-  const chatContainerRef = useRef(null);
+  const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const chatContainerRef = useRef(null);
   const [users, setUsers] = useState([]);
-  const [chatId, setChatId] = useState('');
-  const [otherUserEmail, setOtherUserEmail] = useState('');
-  const chatRef = useRef(null);
+  const [userId, setUserId] = useState('');
 
-  function scrollToBottom() {
-    chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    console.log('chatRef.current.scrollTop:', chatRef.current.scrollTop);
-  }
-
+  // отримуємо список усіх користувачів
   useEffect(() => {
     const getUsers = async () => {
       const userRef = collection(db, 'users');
+
       const querySnapshot = await getDocs(userRef);
       const userList = querySnapshot.docs.map(doc => doc.data());
       setUsers(userList);
@@ -42,91 +35,56 @@ const UserList = () => {
     getUsers();
   }, []);
 
+  // отримуємо id активного користувача
+  const usersRef = collection(db, 'users');
+
   useEffect(() => {
-    scrollToBottom();
+    const querySnapshot = query(
+      usersRef,
+      where('userEmail', '==', `${currentUser.email}`),
+    );
+    getDocs(querySnapshot)
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          const userId = doc.id;
+          setUserId(userId);
+          dispatch(
+            setUserIdR({
+              userId: userId,
+            }),
+          );
+        });
+      })
+      .catch(error => {
+        console.error('Error getting documents: ', error);
+      });
   }, []);
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  const chatsRef = collection(db, 'chats');
-  // const usersRef = collection(db, 'users');
+  // добавляємо друзів для данного користувача
+  const handleAddNewFriends = async otherUser => {
+    const userRef = doc(usersRef, userId);
+    const friendsRef = collection(userRef, 'friends');
 
-  // функція для створення нового чату та додавання користувачів до чату
-  // const createPrivateChat = async (currentUser, otherUser) => {
-  //   console.log('otherUser:', otherUser);
-  //   console.log('currentUser:', currentUser);
-  //   // створюємо новий документ чату у колекції chats
-  //   const chatRef = await addDoc(chatsRef, {});
+    const friendsSnapshot = await getDocs(friendsRef);
+    console.log('friendsSnapshot:', friendsSnapshot.docs);
 
-  //   // додаємо обидвох користувачів до чату
-  //   await Promise.all([
-  //     setDoc(doc(chatRef, 'users', currentUser.id), {
-  //       name: currentUser.userEmail,
-  //       // photo: currentUser.photoURL,
-  //     }),
-  //     setDoc(doc(chatRef, 'users', otherUser.id), {
-  //       // name: otherUser.userEmail,
-  //       // photo: otherUser.photoURL,
-  //     }),
-  //   ]);
-
-  //   // повертаємо ID нового чату
-  //   return chatRef.id;
-  // };
-
-  const handleStartPrivateChat = async otherUser => {
-    const q = query(
-      chatsRef,
-      where(`users.${currentUser.id}`, '==', true),
-      where(`users.${otherUser.id}`, '==', true),
-      limit(1),
+    const isFriendAlreadyAdded = friendsSnapshot.docs.some(
+      doc => doc.data().email === otherUser.userEmail,
     );
 
-    const querySnapshot = await getDocs(q);
-
-    if (!querySnapshot.empty) {
-      const chatId = querySnapshot.docs[0].id;
-      setChatId(chatId);
-      setOtherUserEmail(otherUser.userEmail);
-      console.log('чат уже є');
-      return chatId;
-    } else {
-      console.log('создали новий чат');
-      const chatId = `${currentUser.id}_${otherUser.id}`;
-      await setDoc(doc(chatsRef, chatId), {
-        users: {
-          [currentUser.id]: true,
-          [otherUser.id]: true,
-        },
-      });
-      setChatId(chatId);
-
-      return chatId;
+    if (isFriendAlreadyAdded) {
+      console.log('Друг уже доданий');
+      return;
     }
+
+    addDoc(friendsRef, {
+      email: otherUser.userEmail || null,
+      photo: otherUser.photo || null,
+      name: otherUser.name || null,
+      id: otherUser.id || null,
+    });
   };
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  //
-
-  // const sendMessage = async message => {
-  //   const chatRef = doc(chatsRef, chatId);
-
-  //   // додаємо новий документ у колекцію повідомлень чату
-  //   await addDoc(collection(chatRef, 'messages'), {
-  //     // sender: {
-  //     //   uid: sender.id,
-  //     //   // name: sender.displayName,
-  //     //   // photo: sender.photoURL,
-  //     // },
-  //     text: message,
-  //     timestamp: serverTimestamp(),
-  //   });
-  // };
-
-  //
-  //
-  //
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   return (
     <div className={s.container}>
       <h2 className={s.title}>User List</h2>
@@ -143,36 +101,22 @@ const UserList = () => {
             ) : (
               <p className={s.email}>{userEmail}</p>
             )}
-
             <Button
               onClick={() =>
-                handleStartPrivateChat({
+                handleAddNewFriends({
                   id,
                   photo,
                   userEmail,
                   name,
                 })
               }
-              title={'Відкрити чат'}
+              title={'в друзі'}
               clasName={'userlistBtn'}
               type={'button'}
             />
           </li>
         ))}
       </ul>
-      <ul className={s.chat__list} ref={chatRef}>
-        {chatId ? (
-          <PrivateChat chatId={chatId} otherUserEmail={otherUserEmail} />
-        ) : (
-          <h1> Приватний чат</h1>
-        )}
-      </ul>
-      {/* <Button
-        onClick={() => sendMessage('hrthehh')}
-        title={'Semd message'}
-        clasName={'userlistBtn'}
-        type={'button'}
-      /> */}
     </div>
   );
 };

@@ -1,17 +1,19 @@
 import './App.scss';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import 'react-toastify/dist/ReactToastify.css';
+// import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
+// import { auth } from './firebase';
+// import { useState } from 'react';
+// import { useEffect } from 'react';
 import React, { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Login from './Pages/Login';
 import SingIn from './Pages/SingIn';
-// import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
-import { auth } from './firebase';
-import { useState } from 'react';
-import { useEffect } from 'react';
 
 const HomePage = React.lazy(() => import('./Pages/HomePage/HomePage'));
 const Profile = React.lazy(() => import('./Pages/Profile/Profile'));
+const AllUsers = React.lazy(() => import('./Pages/AllUsers/AllUsers'));
+const ChatPage = React.lazy(() => import('./Pages/ChatPage/ChatPage'));
 const QuestionsPage1 = React.lazy(() =>
   import('./Pages/QuestionsPage1/QuestionsPage1'),
 );
@@ -32,17 +34,17 @@ const Layouts = React.lazy(() => import('./Components/Layouts/Layouts'));
 const Loading = React.lazy(() => import('./Components/Loading/Loading'));
 
 export default function App() {
-  const [isAuth, setIsAuth] = useState(null);
+  // const [isAuth, setIsAuth] = useState(null);
 
-  useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        setIsAuth(user.reloadUserInfo.email);
-      } else {
-        return null;
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   auth.onAuthStateChanged(user => {
+  //     if (user) {
+  //       setIsAuth(user.reloadUserInfo.email);
+  //     } else {
+  //       return null;
+  //     }
+  //   });
+  // }, []);
 
   return (
     <>
@@ -57,6 +59,8 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/sing" element={<SingIn />} />
+            <Route path="/users" element={<AllUsers />} />
+            <Route path="/chat" element={<ChatPage />} />
           </Route>
         </Routes>
       </Suspense>

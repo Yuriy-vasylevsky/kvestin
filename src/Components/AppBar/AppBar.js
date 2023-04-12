@@ -3,11 +3,13 @@ import Container from '../Container/Container';
 import imgGuest from '../../images/profile/1.jpg';
 import { Link } from 'react-router-dom';
 import Button from '../Button/Button';
-import { useEffect } from 'react';
+
 import React, { useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { useSelector } from 'react-redux';
 import { removeUser } from '../../redux/auth/auth-slices';
+import { removeChatId } from '../../redux/chat/chat-slice';
+import { removeUserId } from '../../redux/friends/friends-slice';
 import { useDispatch } from 'react-redux';
 
 export default function AppBar() {
@@ -18,17 +20,19 @@ export default function AppBar() {
   const logAut = () => {
     auth.signOut();
     dispatch(removeUser());
+    dispatch(removeChatId());
+    dispatch(removeUserId());
   };
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-      } else {
-      }
-    });
+  // useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged(user => {
+  //     if (user) {
+  //     } else {
+  //     }
+  //   });
 
-    return unsubscribe;
-  });
+  //   return unsubscribe;
+  // });
 
   return (
     <header className={s.header}>
@@ -50,13 +54,23 @@ export default function AppBar() {
             </div>
           ) : (
             <div className={s.flex}>
+              <Link to="/users" className={s.link}>
+                {' '}
+                Усі користувачі
+              </Link>
+              <Link to="/chat" className={s.link}>
+                Общий чат
+              </Link>
+
               <Button onClick={logAut} title={'Вийти'} clasName={'button'} />
+
               <div className={s.profile__box}>
                 {user.name ? (
                   <p className={s.text}>{user.name}</p>
                 ) : (
                   <p className={s.text}>{user.email}</p>
                 )}
+
                 <Link to="/profile" className={s.logo}>
                   {user.photo ? (
                     <img
