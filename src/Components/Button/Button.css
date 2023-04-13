@@ -58,3 +58,19 @@
   border: none;
   cursor: pointer;
 }
+
+.button__loading {
+  position: relative;
+  z-index: 100;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  background: transparent;
+  border: 1px solid #ff014f;
+  box-sizing: border-box;
+  border-radius: 30px;
+  padding: 5px 15px 5px 15px;
+  color: aliceblue;
+  cursor: pointer;
+}

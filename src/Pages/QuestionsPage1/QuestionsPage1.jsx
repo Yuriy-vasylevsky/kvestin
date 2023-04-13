@@ -1,4 +1,4 @@
-// import s from './QuestionsPage1.module.scss';
+import s from './QuestionsPage1.module.scss';
 
 import Container from '../../Components/Container/Container';
 import Footer from '../../Components/Footer/Footer';
@@ -103,7 +103,7 @@ export default function QuestionsPage_1() {
 
   return (
     <>
-      <main className="main">
+      <main className={s.main}>
         <Container>
           {loading && <Loading />}
           <Section className={'section-hero'}>

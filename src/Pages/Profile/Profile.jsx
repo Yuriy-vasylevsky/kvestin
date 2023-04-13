@@ -13,12 +13,16 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../../redux/auth/auth-slices';
+import { removeUser } from '../../redux/auth/auth-slices';
+import { removeChatId } from '../../redux/chat/chat-slice';
+import { removeUserId } from '../../redux/friends/friends-slice';
 
 const Profile = () => {
   const [newName, setNewName] = useState('');
   const [newLabelName, setNewLabelName] = useState('Вибрати фото');
   const [file, setFile] = useState('');
   const [currentUser, setCurrentUser] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -27,6 +31,7 @@ const Profile = () => {
   const auth = getAuth();
   const storage = getStorage();
 
+  // Перевірка авторизації
   useEffect(() => {
     auth.onAuthStateChanged(user => {
       if (user) {
@@ -37,51 +42,74 @@ const Profile = () => {
     });
   });
 
+  // Зміна імя
   const handleChangeName = e => {
     e.preventDefault();
 
-    updateProfile(currentUser, {
-      displayName: newName,
-    })
-      .then(() => {
+    const trimName = newName.trim();
+
+    if (trimName) {
+      updateProfile(currentUser, {
+        displayName: trimName,
+      }).then(() => {
         setNewName('');
         dispatch(
           setUser({
             ...user,
-            name: newName,
+            name: trimName,
           }),
         );
-      })
-      .catch(error => {});
+      });
+    } else {
+      return console.log('пусто');
+    }
   };
 
   const handleFileUpload = e => {
     e.preventDefault();
 
     const storageRef = ref(storage, 'myFiles/' + file.name);
-    uploadBytes(storageRef, file)
-      .then(() => {
-        getDownloadURL(storageRef).then(url => {
-          dispatch(
-            setUser({
-              ...user,
-              photo: url,
-            }),
-          );
-          updateProfile(currentUser, {
-            photoURL: url,
-          });
-        });
-        setNewLabelName('Завантажити');
-        return toast('Файл успішно завантажено на Firebase Storage');
-      })
 
-      .catch(error => {
-        console.log(
-          'Помилка під час завантаження файлу на Firebase Storage:',
-          error,
-        );
-      });
+    if (file) {
+      setIsLoading(true);
+
+      uploadBytes(storageRef, file)
+        .then(() => {
+          getDownloadURL(storageRef).then(url => {
+            dispatch(
+              setUser({
+                ...user,
+                photo: url,
+              }),
+            );
+            updateProfile(currentUser, {
+              photoURL: url,
+            });
+          });
+          setNewLabelName('Завантажити');
+          setIsLoading(false);
+          setFile('');
+          console.log('Завантажено');
+          // return toast('Файл успішно завантажено на Firebase Storage');
+        })
+
+        .catch(error => {
+          console.log(
+            'Помилка під час завантаження файлу на Firebase Storage:',
+            error,
+          );
+        });
+    } else {
+      return console.log('пусто');
+    }
+  };
+
+  const logAut = () => {
+    auth.signOut();
+    dispatch(removeUser());
+    dispatch(removeChatId());
+    dispatch(removeUserId());
+    localStorage.setItem('selectedUserId', '');
   };
 
   return (
@@ -138,13 +166,23 @@ const Profile = () => {
                     }}
                   />
                   <label className="profile__input-label">{newLabelName}</label>
-                  <Button
-                    type={'submit'}
-                    title={'Завантажити'}
-                    clasName={'button'}
-                  />
+
+                  {isLoading ? (
+                    <Button
+                      type={'submit'}
+                      title={'Йде загрузка'}
+                      clasName={'div'}
+                    />
+                  ) : (
+                    <Button
+                      type={'submit'}
+                      title={'Завантажити'}
+                      clasName={'button'}
+                    />
+                  )}
                 </form>
               </div>
+              <Button onClick={logAut} title={'Вийти'} clasName={'button'} />
             </div>
           </div>
         </div>

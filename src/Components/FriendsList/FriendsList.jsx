@@ -26,7 +26,7 @@ const UserList = () => {
   const [selectedUserId, setSelectedUserId] = useState(
     localStorage.getItem('selectedUserId'),
   );
-  console.log('selectedUserId:', selectedUserId);
+
   const [users, setUsers] = useState([]);
   useEffect(() => {
     if (currentUserId.userId) {
