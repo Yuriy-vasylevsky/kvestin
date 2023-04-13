@@ -16,11 +16,18 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const UserList = () => {
   const currentUser = useSelector(state => state.user);
+  console.log('currentUser:', currentUser);
   const dispatch = useDispatch();
   // const navigate = useNavigate();
   // const chatContainerRef = useRef(null);
   const [users, setUsers] = useState([]);
   const [userId, setUserId] = useState('');
+  const [friendEmail, setFriendEmail] = useState(
+    localStorage.getItem(`friends_${currentUser.email}`)
+      ? localStorage.getItem(`friends_${currentUser.email}`).split(',')
+      : [],
+  );
+  console.log('friendEmail:', friendEmail);
 
   // отримуємо список усіх користувачів
   useEffect(() => {
@@ -66,7 +73,6 @@ const UserList = () => {
     const friendsRef = collection(userRef, 'friends');
 
     const friendsSnapshot = await getDocs(friendsRef);
-    console.log('friendsSnapshot:', friendsSnapshot.docs);
 
     const isFriendAlreadyAdded = friendsSnapshot.docs.some(
       doc => doc.data().email === otherUser.userEmail,
@@ -76,7 +82,8 @@ const UserList = () => {
       console.log('Друг уже доданий');
       return;
     }
-
+    // localStorage.setItem(`friends_${currentUser.email}`, friendEmail);
+    setFriendEmail(state => [...state, otherUser.userEmail]);
     addDoc(friendsRef, {
       email: otherUser.userEmail || null,
       photo: otherUser.photo || null,
@@ -84,6 +91,7 @@ const UserList = () => {
       id: otherUser.id || null,
     });
   };
+  localStorage.setItem(`friends_${currentUser.email}`, friendEmail);
 
   return (
     <div className={s.container}>
@@ -110,8 +118,15 @@ const UserList = () => {
                   name,
                 })
               }
-              title={'в друзі'}
-              clasName={'userlistBtn'}
+              title={
+                friendEmail.includes(userEmail)
+                  ? 'Добавлено'
+                  : 'Добавити в друзі'
+              }
+              clasName={
+                // 'userlistBtn'
+                friendEmail.includes(userEmail) ? 'userlistBtn' : 'userlistBtn1'
+              }
               type={'button'}
             />
           </li>

@@ -40,7 +40,23 @@
   width: 300px;
   padding: 0 20px;
   line-height: 40px;
-  border-width: 0;
+
+  border-radius: 20px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.userlistBtn1 {
+  margin-top: 20px;
+  background: transparent;
+  border: 1px solid #ff014f;
+  color: white;
+  font-size: 14px;
+  display: block;
+  width: 300px;
+  padding: 0 20px;
+  line-height: 40px;
+
   border-radius: 20px;
   cursor: pointer;
   text-decoration: none;
