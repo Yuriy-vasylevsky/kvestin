@@ -4,7 +4,7 @@ import Container from '../../Components/Container/Container';
 import Footer from '../../Components/Footer/Footer';
 import Loading from '../../Components/Loading/Loading';
 import QuestionBox from '../../Components/QuestionBox/QuestionBox';
-// import QuestionBoxHistory from '../../Components/Chat.js/Chat';
+import InfoPage from '../../Pages/InfoPage/InfoPage';
 import Section from '../../Components/Section/Section ';
 import PrivateChat from '../../Components/PrivateChat/PrivateChat';
 import { questions1 } from '../../data/questions1';
@@ -110,12 +110,14 @@ export default function QuestionsPage_1() {
             <QuestionBox questions={questions} title={'Обычние вопросы'} />
             {/* <QuestionBoxHistory historyQuestion={historyQuestion} /> */}
           </Section>
-          {chatId && (
+          {chatId ? (
             <PrivateChat
               chatId={chatId}
               otherUserEmail={otherUserEmail}
               questions={questions}
             />
+          ) : (
+            <InfoPage />
           )}
         </Container>
       </main>

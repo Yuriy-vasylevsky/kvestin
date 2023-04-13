@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 import { auth } from '../../firebase';
 import 'react-toastify/dist/ReactToastify.css';
 // import { useSelector } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // import { auth } from '../../firebase';
 // import { db } from '../../firebase';
 // import {
@@ -35,7 +35,7 @@ export default function QuestionsPage_1() {
   //   const [counter, setCounter] = useState(0);
   // const [historyQuestion, setHistoryQuestion] = useState([]);
   //   const { chatId, otherUserEmail } = useSelector(state => state.chat);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
@@ -43,6 +43,7 @@ export default function QuestionsPage_1() {
       if (user) {
         return setIsAuth(true);
       } else {
+        navigate('/sing');
         return setIsAuth(false);
       }
     });

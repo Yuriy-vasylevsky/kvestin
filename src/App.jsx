@@ -14,6 +14,7 @@ const HomePage = React.lazy(() => import('./Pages/HomePage/HomePage'));
 const Profile = React.lazy(() => import('./Pages/Profile/Profile'));
 const AllUsers = React.lazy(() => import('./Pages/AllUsers/AllUsers'));
 const ChatPage = React.lazy(() => import('./Pages/ChatPage/ChatPage'));
+const InfoPage = React.lazy(() => import('./Pages/InfoPage/InfoPage'));
 const QuestionsPage1 = React.lazy(() =>
   import('./Pages/QuestionsPage1/QuestionsPage1'),
 );
@@ -61,6 +62,7 @@ export default function App() {
             <Route path="/sing" element={<SingIn />} />
             <Route path="/users" element={<AllUsers />} />
             <Route path="/chat" element={<ChatPage />} />
+            <Route path="/info" element={<InfoPage />} />
           </Route>
         </Routes>
       </Suspense>
