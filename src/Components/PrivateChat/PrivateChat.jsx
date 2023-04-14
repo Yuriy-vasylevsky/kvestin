@@ -16,7 +16,9 @@ import imgGuest from '../../images/profile/1.jpg';
 // import { Navigate } from 'react-router-dom';
 // import { useNavigate } from 'react-router-dom';
 
-function PrivateChat({ chatId, otherUserEmail, questions }) {
+function PrivateChat({ chatId, otherUserEmail, questions, otherUserName }) {
+  console.log('chatId:', chatId);
+  console.log('otherUserEmail:', otherUserEmail);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   // const [currentQuestions, setCurrentQuestions] = useState([]);
@@ -87,7 +89,7 @@ function PrivateChat({ chatId, otherUserEmail, questions }) {
 
   return (
     <>
-      <h1> Чат з {otherUserEmail && otherUserEmail}</h1>
+      <h1> Чат з {otherUserName ? otherUserName : otherUserEmail}</h1>
 
       <div className="chat-container">
         <div className="message-container" ref={chatContainerRef}>

@@ -32,7 +32,9 @@ export default function QuestionsPage_1() {
   const [loading, setLoading] = useState(false);
   const [counter, setCounter] = useState(0);
   // const [historyQuestion, setHistoryQuestion] = useState([]);
-  const { chatId, otherUserEmail } = useSelector(state => state.chat);
+  const { chatId, otherUserEmail, otherUserName } = useSelector(
+    state => state.chat,
+  );
   // const navigate = useNavigate();
 
   // useEffect(() => {
@@ -115,6 +117,7 @@ export default function QuestionsPage_1() {
               chatId={chatId}
               otherUserEmail={otherUserEmail}
               questions={questions}
+              otherUserName={otherUserName}
             />
           ) : (
             <InfoPage />

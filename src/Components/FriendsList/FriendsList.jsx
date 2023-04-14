@@ -73,6 +73,7 @@ const UserList = () => {
   const chatsRef = collection(db, 'chats');
 
   const handleStartPrivateChat = async otherUser => {
+    console.log('otherUser:', otherUser);
     setSelectedUserId(otherUser.id);
     localStorage.setItem('selectedUserId', otherUser.id);
 
@@ -90,7 +91,8 @@ const UserList = () => {
       dispatch(
         setChatIdR({
           chatId: chatId,
-          otherUserEmail: otherUser.userEmail,
+          otherUserEmail: otherUser.email,
+          otherUserName: otherUser.name,
         }),
         navigate('/q1'),
       );

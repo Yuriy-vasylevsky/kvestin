@@ -20,9 +20,10 @@ export default function MobileMenu(onChange) {
           <span className={s.logoRed}>K</span>
           <span className={s.logo__text}>vestin</span>
         </Link>
+
         {!user.email ? (
           <div className={s.auth__box}>
-            <Link to="sing" className={s.text}>
+            <Link to="sing" className={s.text} onClick={handleClick}>
               Увійти
             </Link>
             <Link to="login" className={s.text} onClick={handleClick}>
@@ -32,12 +33,17 @@ export default function MobileMenu(onChange) {
         ) : (
           <div className={s.flex}>
             <div className={s.profile__box}>
-              {user.name ? (
+              {/* {user.name ? (
                 <p className={s.text}>{user.name}</p>
               ) : (
                 <p className={s.text}>{user.email}</p>
-              )}
+                )} */}
               <Link to="/profile" className={s.logo} onClick={handleClick}>
+                {user.name ? (
+                  <p className={s.text}>{user.name}</p>
+                ) : (
+                  <p className={s.text}>{user.email}</p>
+                )}
                 {user.photo ? (
                   <img
                     src={user.photo}
@@ -53,13 +59,16 @@ export default function MobileMenu(onChange) {
                 )}
               </Link>{' '}
             </div>
+
             <Link to="/users" className={s.link} onClick={handleClick}>
               {' '}
               Усі користувачі
             </Link>
+
             <Link to="/chat" className={s.link} onClick={handleClick}>
               Общий чат
             </Link>
+
             <Link to="/info" className={s.link} onClick={handleClick}>
               Інструкція
             </Link>

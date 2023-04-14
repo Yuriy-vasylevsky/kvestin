@@ -12,11 +12,13 @@ const chatSlice = createSlice({
     setChatIdR(state, { payload }) {
       state.chatId = payload.chatId;
       state.otherUserEmail = payload.otherUserEmail;
+      state.otherUserName = payload.otherUserName;
     },
 
     removeChatId(state, { payload }) {
       state.chatId = null;
       state.otherUserEmail = null;
+      state.otherUserName = null;
     },
   },
 });

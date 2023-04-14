@@ -8,12 +8,22 @@
     z-index: 100;
     text-align: center;
     padding: 15px;
+
+    @media screen and (max-width: 420px) {
+      padding: 5px;
+      font-size: 14px;
+    }
   }
 }
 .box-section-hero__title {
   color: #ffffff;
   padding-bottom: 15px;
   text-align: center;
+
+  @media screen and (max-width: 420px) {
+    font-size: 18px;
+    padding-bottom: 5px;
+  }
 }
 
 .section-hero {
@@ -31,5 +41,9 @@
     margin: 0 auto 20px auto;
     // text-align: center;
     z-index: 100;
+
+    @media screen and (max-width: 420px) {
+      min-height: 60px;
+    }
   }
 }
