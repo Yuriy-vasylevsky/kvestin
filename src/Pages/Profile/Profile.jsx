@@ -5,7 +5,7 @@ import FriendsList from '../../Components/FriendsList/FriendsList';
 import Button from '../../Components/Button/Button';
 // import { IconContext } from 'react-icons';
 // import { RiUploadCloud2Fill } from 'react-icons/ri';
-// import MagikCard from '../../Components/MagikCard/MagikCard';
+import MagikCard from '../../Components/MagikCard/MagikCard';
 import imgGuest from '../../images/profile/1.jpg';
 
 import { ToastContainer, toast } from 'react-toastify';

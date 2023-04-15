@@ -99,11 +99,11 @@
 
 .input_field {
   position: fixed;
-  bottom: 10px;
+  bottom: 15px;
   left: 15px;
   right: 15px;
   padding: 10px;
-  padding-right: 30px;
+  padding-right: 40px;
   // border-radius: 10px;
   background-color: transparent;
   border: none;
@@ -111,10 +111,12 @@
   border-bottom: #ff014f solid 1px;
   outline: none;
   color: #cedff6;
+  font-size: 16px;
 }
 
 .input_field::placeholder {
   color: rgb(89, 83, 83);
+  font-size: 16px;
 }
 
 // .send_button {
@@ -135,7 +137,7 @@
   // border: #005e7d solid 1px;
   position: fixed;
   top: 60px;
-  bottom: 30px;
+  bottom: 38px;
   right: 15px;
   left: 15px;
   display: flex;
