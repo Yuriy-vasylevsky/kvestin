@@ -1,9 +1,18 @@
 .input-field {
   flex-grow: 1;
   padding: 10px;
-  border-radius: 10px;
+  padding-right: 30px;
+  // border-radius: 10px;
+  background-color: transparent;
   border: none;
   margin-right: 10px;
+  border-bottom: #005e7d solid 1px;
+  outline: none;
+  color: #cedff6;
+}
+
+.input-field::placeholder {
+  color: rgb(89, 83, 83);
 }
 
 .send-button {
@@ -21,10 +30,16 @@
 }
 
 .message-container {
+  // border: #005e7d solid 1px;
+  position: fixed;
+  top: 170px;
+  bottom: 40px;
+  right: 15px;
+  left: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
+  min-height: 250px;
   overflow-x: scroll;
 }
 
@@ -38,7 +53,7 @@
   margin-left: auto;
   align-items: center;
   border-radius: 20px;
-  max-width: 60%;
+  max-width: 90%;
   margin-bottom: 10px;
 }
 
@@ -88,6 +103,13 @@
   flex-direction: column;
   background-color: #f2f2f2;
   min-width: 100px;
-  border-radius: 30px;
-  padding: 15px;
+  border-radius: 15px;
+  padding: 9px;
+}
+
+.chat-title {
+  position: fixed;
+  top: 68px;
+  font-size: 20px;
+  color: #cedff6;
 }

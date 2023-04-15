@@ -2,7 +2,8 @@ import s from './QuestionsPage1.module.scss';
 
 import Container from '../../Components/Container/Container';
 import Footer from '../../Components/Footer/Footer';
-import Loading from '../../Components/Loading/Loading';
+// import Loading from '../../Components/Loading/Loading';
+import Loader from '../../Components/Loader/Loader';
 import QuestionBox from '../../Components/QuestionBox/QuestionBox';
 import InfoPage from '../../Pages/InfoPage/InfoPage';
 import Section from '../../Components/Section/Section ';
@@ -15,23 +16,15 @@ import { useSelector } from 'react-redux';
 // import { useNavigate } from 'react-router-dom';
 // import { auth } from '../../firebase';
 import { db } from '../../firebase';
-import {
-  collection,
-  doc,
-  addDoc,
-  serverTimestamp,
-  query,
-  orderBy,
-  onSnapshot,
-} from 'firebase/firestore';
-// import { clearGlobalAppDefaultCred } from 'firebase-admin/lib/app/credential-factory';
+import { collection, doc, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function QuestionsPage_1() {
   const [usedNumbers, setUsedNumbers] = useState([]);
   const [questions, setQuestions] = useState('');
   const [loading, setLoading] = useState(false);
   const [counter, setCounter] = useState(0);
-  // const [historyQuestion, setHistoryQuestion] = useState([]);
+  // const [message, setMessage] = useState('');
+
   const { chatId, otherUserEmail, otherUserName } = useSelector(
     state => state.chat,
   );
@@ -77,11 +70,11 @@ export default function QuestionsPage_1() {
     setCounter(prev => prev + 1);
   };
 
-  const cleanOll = () => {
-    setQuestions('');
-    setCounter(0);
-    setUsedNumbers([]);
-  };
+  // const cleanOll = () => {
+  //   setQuestions('');
+  //   setCounter(0);
+  //   setUsedNumbers([]);
+  // };
 
   const sendQuestions = async () => {
     const chatsRef = collection(db, 'chats');
@@ -107,11 +100,13 @@ export default function QuestionsPage_1() {
     <>
       <main className={s.main}>
         <Container>
-          {loading && <Loading />}
-          <Section className={'section-hero'}>
-            <QuestionBox questions={questions} title={'Обычние вопросы'} />
-            {/* <QuestionBoxHistory historyQuestion={historyQuestion} /> */}
-          </Section>
+          {chatId && (
+            <Section className={'section-hero'}>
+              {loading && <Loader />}
+              <QuestionBox questions={questions} title={'Обычние вопросы'} />
+            </Section>
+          )}
+
           {chatId ? (
             <PrivateChat
               chatId={chatId}
@@ -124,7 +119,14 @@ export default function QuestionsPage_1() {
           )}
         </Container>
       </main>
-      <Footer counter={counter} onClik={onClik} cleanOll={sendQuestions} />
+      <Footer
+        chatId={chatId}
+        counter={counter}
+        onClik={onClik}
+        cleanOll={sendQuestions}
+        questions={questions}
+      />
+
       <ToastContainer />
     </>
   );

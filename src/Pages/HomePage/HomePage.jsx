@@ -45,7 +45,7 @@ export default function HomePage() {
               clas={''}
             />
 
-            <HeroCards
+            {/* <HeroCards
               title={'Вопросы с перчинкой'}
               img={img2}
               path={'q2'}
@@ -64,7 +64,7 @@ export default function HomePage() {
               img={img4}
               path={'q4'}
               clas={'position__img'}
-            />
+            /> */}
           </section>
         </Container>
       </main>

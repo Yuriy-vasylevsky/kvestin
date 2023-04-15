@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import s from './AppBar.module.scss';
-import { FiAlignJustify } from 'react-icons/fi';
+import { FaUserFriends } from 'react-icons/fa';
 import Container from '../Container/Container';
 import MobileMenu from '../MobileMenu/MobileMenu';
 import imgGuest from '../../images/profile/1.jpg';
 import { Link } from 'react-router-dom';
 import { IconContext } from 'react-icons';
 import { useSelector } from 'react-redux';
+import { TiMessages } from 'react-icons/ti';
+import { BsFillPatchQuestionFill } from 'react-icons/bs';
+import { FaUserCircle } from 'react-icons/fa';
 
 export default function AppBar() {
   const user = useSelector(state => state.user);
@@ -70,9 +73,25 @@ export default function AppBar() {
               </div>
             </div>
           )}
-          <IconContext.Provider value={{ className: 'icons' }}>
-            <FiAlignJustify onClick={() => setIsOpen(prev => !prev)} />
-          </IconContext.Provider>
+          {user.email && (
+            <IconContext.Provider value={{ className: 'icons' }}>
+              <Link to="/info" className={s.link}>
+                <BsFillPatchQuestionFill />
+              </Link>
+
+              <Link to="/chat" className={s.link}>
+                <TiMessages />
+              </Link>
+
+              <Link to="/users" className={s.link}>
+                <FaUserFriends />
+              </Link>
+
+              <Link to="/profile" className={s.link}>
+                <FaUserCircle />
+              </Link>
+            </IconContext.Provider>
+          )}
 
           {isOpen && <MobileMenu onChange={handleStateChange} />}
         </div>

@@ -4,6 +4,8 @@ import s from './UserList.module.scss';
 import imgGuest from '../../images/profile/1.jpg';
 import Button from '../../Components/Button/Button';
 import { setUserIdR } from '../../redux/friends/friends-slice';
+import { FaUserPlus, FaUserCheck } from 'react-icons/fa';
+import { IconContext } from 'react-icons';
 import {
   collection,
   doc,
@@ -95,20 +97,24 @@ const UserList = () => {
 
   return (
     <div className={s.container}>
-      <h2 className={s.title}>User List</h2>
+      <h2 className={s.title}>Усі користувачі</h2>
       <ul className={s.list}>
         {users.map(({ id, photo, userEmail, name }) => (
           <li key={id} className={s.item}>
-            {photo ? (
-              <img src={photo} alt="" className={s.message__user} />
-            ) : (
-              <img src={imgGuest} alt="" className={s.message__user} />
-            )}
-            {name ? (
-              <p className={s.email}>{name}</p>
-            ) : (
-              <p className={s.email}>{userEmail}</p>
-            )}
+            <div className={s.user__box}>
+              {photo ? (
+                <img src={photo} alt="" className={s.message__user} />
+              ) : (
+                <img src={imgGuest} alt="" className={s.message__user} />
+              )}
+              {name ? (
+                <p className={s.email}>{name}</p>
+              ) : (
+                <p className={s.email}>{userEmail}</p>
+              )}
+            </div>
+
+            {/* 
             <Button
               onClick={() =>
                 handleAddNewFriends({
@@ -128,7 +134,26 @@ const UserList = () => {
                 friendEmail.includes(userEmail) ? 'userlistBtn' : 'userlistBtn1'
               }
               type={'button'}
-            />
+            /> */}
+
+            {!friendEmail.includes(userEmail) ? (
+              <IconContext.Provider value={{ className: 'friend-icon' }}>
+                <FaUserPlus
+                  onClick={() =>
+                    handleAddNewFriends({
+                      id,
+                      photo,
+                      userEmail,
+                      name,
+                    })
+                  }
+                />
+              </IconContext.Provider>
+            ) : (
+              <IconContext.Provider value={{ className: 'friend-icon-added' }}>
+                <FaUserCheck />
+              </IconContext.Provider>
+            )}
           </li>
         ))}
       </ul>

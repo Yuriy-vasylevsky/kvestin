@@ -69,7 +69,7 @@ export default function MobileMenu(onChange) {
               Общий чат
             </Link>
 
-            <Link to="/info" className={s.link} onClick={handleClick}>
+            <Link to="/info" className={s.link} onClick={() => onChange(false)}>
               Інструкція
             </Link>
           </div>

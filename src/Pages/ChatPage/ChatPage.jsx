@@ -3,7 +3,7 @@
 import Container from '../../Components/Container/Container';
 // import Footer from '../../Components/Footer/Footer';
 import Loading from '../../Components/Loading/Loading';
-import Chat from '../../Components/Chat.js/Chat';
+import Chat from '../../Components/Chat/Chat';
 // import QuestionBoxHistory from '../../Components/Chat.js/Chat';
 import Section from '../../Components/Section/Section ';
 // import PrivateChat from '../../Components/PrivateChat/PrivateChat';
