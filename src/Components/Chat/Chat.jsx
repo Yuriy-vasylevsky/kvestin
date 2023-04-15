@@ -89,11 +89,14 @@ const Chat = () => {
             >
               <div className={s.message__user}>
                 <img src={photo} alt="" className={s.message__user_img} />
-                <p className={s.message__user_name}>{userName}</p>
+                {/* <p className={s.message__user_name}>{userName}</p> */}
               </div>
-              <div className={s.message__text}>
-                <p className={s.message__text_text}>{text}</p>
-                {/* <p className="message__text-date">{createdAt.seconds}</p> */}
+              <div className={s.flex}>
+                <p className={s.message__user_name}>{userName}</p>
+                <div className={s.message__text}>
+                  <p className={s.message__text_text}>{text}</p>
+                  {/* <p className="message__text-date">{createdAt.seconds}</p> */}
+                </div>
               </div>
             </div>
           ),

@@ -194,11 +194,8 @@
   font-weight: bold;
   font-size: 5px;
   color: var(--main-text-color);
-  margin-top: 5px;
+  margin-bottom: 5px;
   text-align: center;
-  // max-width: 100px;
-  // min-width: 100px;
-  width: 35px;
   overflow: hidden;
 }
 
@@ -219,4 +216,9 @@
   top: 68px;
   font-size: 20px;
   color: #cedff6;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
 }

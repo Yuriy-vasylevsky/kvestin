@@ -3,6 +3,8 @@ import { db } from '../../firebase';
 import s from './FriendsList.module.scss';
 import imgGuest from '../../images/profile/1.jpg';
 import Button from '../Button/Button';
+import { IconContext } from 'react-icons';
+import { BsChatDotsFill, BsChatHeart } from 'react-icons/bs';
 import { setChatIdR } from '../../redux/chat/chat-slice';
 import { setUserIdR } from '../../redux/friends/friends-slice';
 import {
@@ -129,18 +131,19 @@ const UserList = () => {
       <ul className={s.list}>
         {users.map(({ id, photo, email, name }) => (
           <li key={id} className={s.item}>
-            {photo ? (
-              <img src={photo} alt="" className={s.message__user} />
-            ) : (
-              <img src={imgGuest} alt="" className={s.message__user} />
-            )}
-            {name ? (
-              <p className={s.email}>{name}</p>
-            ) : (
-              <p className={s.email}>{email}</p>
-            )}
-
-            <Button
+            <div className={s.flex}>
+              {photo ? (
+                <img src={photo} alt="" className={s.message__user} />
+              ) : (
+                <img src={imgGuest} alt="" className={s.message__user} />
+              )}
+              {name ? (
+                <p className={s.email}>{name}</p>
+              ) : (
+                <p className={s.email}>{email}</p>
+              )}
+            </div>
+            {/* <Button
               onClick={() =>
                 handleStartPrivateChat({
                   id,
@@ -152,7 +155,37 @@ const UserList = () => {
               title={selectedUserId === id ? 'Вибрано' : 'Відкрити чат'}
               clasName={selectedUserId !== id ? 'userlistBtn' : 'div'}
               type={'button'}
-            />
+            /> */}
+
+            {selectedUserId === id ? (
+              <IconContext.Provider
+                value={{ color: '#ff014f', className: 'upload-icon' }}
+              >
+                <BsChatHeart
+                  onClick={() =>
+                    handleStartPrivateChat({
+                      id,
+                      photo,
+                      email,
+                      name,
+                    })
+                  }
+                />
+              </IconContext.Provider>
+            ) : (
+              <IconContext.Provider value={{ className: 'upload-icon' }}>
+                <BsChatDotsFill
+                  onClick={() =>
+                    handleStartPrivateChat({
+                      id,
+                      photo,
+                      email,
+                      name,
+                    })
+                  }
+                />
+              </IconContext.Provider>
+            )}
           </li>
         ))}
       </ul>

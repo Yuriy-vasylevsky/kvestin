@@ -1,32 +1,56 @@
 .profile__img {
-  width: 300px;
+  max-width: 300px;
+  @media screen and (max-width: 480px) {
+    max-width: 500px;
+  }
 }
 
 .profile {
   display: flex;
+  @media screen and (max-width: 480px) {
+    flex-direction: column;
+    // display: flex;
+    // justify-content: center;
+    // margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .profile__info {
   margin-left: 50px;
+
+  @media screen and (max-width: 480px) {
+    margin-left: 0;
+  }
 }
 
+.buttonS {
+  background-color: transparent;
+  border: none;
+  opacity: 0;
+}
 // .profile__input {
 // }
 
 // .profile__file-input {
 // }
 
-.profile__file-input {
+.profile__file_input {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   position: relative;
   overflow: hidden;
-  display: inline-block;
+  // display: inline-block;
   cursor: pointer;
 }
 
 .profile__input[type='file'] {
+  border: solid 2px #ff014f;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -50px;
+  left: 0px;
   opacity: 0;
   cursor: pointer;
   z-index: 2;
@@ -34,7 +58,7 @@
   height: 100%;
 }
 
-.profile__input-label {
+.profile__input_label {
   display: inline-block;
   margin-right: 30px;
   padding: 10px 20px;
@@ -45,6 +69,11 @@
   cursor: pointer;
   position: relative;
   z-index: -1;
+
+  @media screen and (max-width: 480px) {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
 }
 
 // .profile__input-label:hover {
@@ -56,6 +85,12 @@
   font-size: 32px;
   font-weight: 700;
   margin-bottom: 30px;
+
+  @media screen and (max-width: 480px) {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 26px;
+  }
 }
 
 .update__form {
@@ -67,7 +102,7 @@
   margin-bottom: 30px;
 }
 
-.update__form-label {
+.update__form_label {
   color: var(--main-text-color);
   font-size: 20px;
   font-family: 'Montserrat', sans-serif;
@@ -76,7 +111,7 @@
   margin-bottom: 30px;
 }
 
-.update__form-input {
+.update__form_input {
   padding: 5px;
   margin-bottom: 20px;
 }
@@ -88,8 +123,9 @@
   margin-bottom: 30px;
 }
 
-.update__photo-title {
+.update__photo_title {
   font-size: 20px;
   margin-bottom: 15px;
   color: var(--main-text-color);
+  background: transrarent;
 }
