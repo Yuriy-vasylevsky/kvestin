@@ -1,4 +1,4 @@
-// import s from './QuestionsPage1.module.scss';
+import './ChatPage.scss';
 
 import Container from '../../Components/Container/Container';
 // import Footer from '../../Components/Footer/Footer';
@@ -53,6 +53,7 @@ export default function QuestionsPage_1() {
         <Container>
           {loading && <Loading />}
           <Section className={'section-hero'}>
+            <h1 className="title-chat">Общий чат</h1>
             <Chat />
           </Section>
         </Container>

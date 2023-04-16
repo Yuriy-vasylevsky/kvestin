@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase';
 import s from './UserList.module.scss';
 import imgGuest from '../../images/profile/1.jpg';
-import Button from '../../Components/Button/Button';
+// import Button from '../../Components/Button/Button';
 import { setUserIdR } from '../../redux/friends/friends-slice';
 import { FaUserPlus, FaUserCheck } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
@@ -18,10 +18,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const UserList = () => {
   const currentUser = useSelector(state => state.user);
-  console.log('currentUser:', currentUser);
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  // const chatContainerRef = useRef(null);
   const [users, setUsers] = useState([]);
   const [userId, setUserId] = useState('');
   const [friendEmail, setFriendEmail] = useState(
@@ -29,20 +26,22 @@ const UserList = () => {
       ? localStorage.getItem(`friends_${currentUser.email}`).split(',')
       : [],
   );
-  console.log('friendEmail:', friendEmail);
 
-  // отримуємо список усіх користувачів
+  // отримуємо список усіх користувачів окрім власного акаунту
+
   useEffect(() => {
     const getUsers = async () => {
       const userRef = collection(db, 'users');
 
       const querySnapshot = await getDocs(userRef);
-      const userList = querySnapshot.docs.map(doc => doc.data());
+      const userList = querySnapshot.docs
+        .map(doc => doc.data())
+        .filter(user => user.id !== currentUser.id);
       setUsers(userList);
     };
 
     getUsers();
-  }, []);
+  }, [currentUser]);
 
   // отримуємо id активного користувача
   const usersRef = collection(db, 'users');

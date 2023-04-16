@@ -7,17 +7,28 @@ import Button from '../../Components/Button/Button';
 // import { RiUploadCloud2Fill } from 'react-icons/ri';
 import MagikCard from '../../Components/MagikCard/MagikCard';
 import imgGuest from '../../images/profile/1.jpg';
+import {
+  collection,
+  doc,
+  addDoc,
+  where,
+  query,
+  getDocs,
+} from 'firebase/firestore';
+import { db } from '../../firebase';
 
 import { ToastContainer, toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../../redux/auth/auth-slices';
 import { removeUser } from '../../redux/auth/auth-slices';
 import { removeChatId } from '../../redux/chat/chat-slice';
 import { removeUserId } from '../../redux/friends/friends-slice';
+import { setUserIdR } from '../../redux/friends/friends-slice';
 
 const Profile = () => {
   const [newName, setNewName] = useState('');
@@ -25,6 +36,8 @@ const Profile = () => {
   const [file, setFile] = useState('');
   const [currentUser, setCurrentUser] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [userId, setUserId] = useState('');
+  console.log('userId:', userId);
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -32,6 +45,31 @@ const Profile = () => {
   const navigate = useNavigate();
   const auth = getAuth();
   const storage = getStorage();
+
+  // отримуємо id активного користувача
+  const usersRef = collection(db, 'users');
+
+  useEffect(() => {
+    const querySnapshot = query(
+      usersRef,
+      where('userEmail', '==', `${currentUser.email}`),
+    );
+    getDocs(querySnapshot)
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          const userId = doc.id;
+          setUserId(userId);
+          dispatch(
+            setUserIdR({
+              userId: userId,
+            }),
+          );
+        });
+      })
+      .catch(error => {
+        console.error('Error getting documents: ', error);
+      });
+  }, []);
 
   // Перевірка авторизації
   useEffect(() => {
@@ -48,12 +86,18 @@ const Profile = () => {
   const handleChangeName = e => {
     e.preventDefault();
 
+    const userRef = doc(usersRef, userId);
+    console.log(userRef);
     const trimName = newName.trim();
 
     if (trimName) {
       updateProfile(currentUser, {
         displayName: trimName,
       }).then(() => {
+        userRef.update({
+          userEmail: 'yjhfv',
+        });
+
         setNewName('');
         dispatch(
           setUser({
@@ -84,6 +128,7 @@ const Profile = () => {
                 photo: url,
               }),
             );
+
             updateProfile(currentUser, {
               photoURL: url,
             });

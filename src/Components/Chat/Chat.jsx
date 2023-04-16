@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-
+import imgGuest from '../../images/profile/1.jpg';
 import { IconContext } from 'react-icons';
 
 import { FiImage } from 'react-icons/fi';
@@ -88,7 +88,11 @@ const Chat = () => {
               }`}
             >
               <div className={s.message__user}>
-                <img src={photo} alt="" className={s.message__user_img} />
+                <img
+                  src={photo ? photo : imgGuest}
+                  alt=""
+                  className={s.message__user_img}
+                />
                 {/* <p className={s.message__user_name}>{userName}</p> */}
               </div>
               <div className={s.flex}>
