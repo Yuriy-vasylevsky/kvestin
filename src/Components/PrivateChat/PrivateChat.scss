@@ -18,20 +18,6 @@
   color: rgb(89, 83, 83);
 }
 
-// .send-button {
-//   background-color: #008cba;
-//   color: white;
-//   border-radius: 10px;
-//   border: none;
-//   padding: 10px;
-//   cursor: pointer;
-//   transition: all 0.2s ease-in-out;
-// }
-
-// .send-button:hover {
-//   background-color: #005e7d;
-// }
-
 .message-container {
   // border: #005e7d solid 1px;
   position: fixed;
@@ -58,6 +44,7 @@
   border-radius: 20px;
   max-width: 90%;
   margin-bottom: 10px;
+  color: rgb(0, 0, 0);
 }
 
 .user-message {
@@ -66,6 +53,7 @@
   margin-right: auto;
   border-radius: 20px;
   max-width: 60%;
+  color: rgb(0, 0, 0);
   margin-bottom: 10px;
 }
 
@@ -77,8 +65,23 @@
 }
 
 .my-message .message__user {
+  // color: rgb(0, 0, 0);
   margin-left: 10px;
   margin-right: 0;
+}
+
+.my-message .message__text {
+  // color: rgb(0, 0, 0);
+  background: linear-gradient(to bottom, #add8e6, #87cefa);
+  // background: linear-gradient(to bottom, #f9a7b0, #ffc7d5);
+  // background: linear-gradient(to bottom, #ffc7d5, #ff1493);
+  // background: linear-gradient(to bottom, #ff69b4, #8b008b);
+  // background: linear-gradient(to bottom, #ffc0cb, #9400d3);
+  // background: linear-gradient(to bottom, #5d737e, #6b1c5e);
+  // background: linear-gradient(to bottom, #f49ac2, #6b1c5e);
+  // background: linear-gradient(to bottom, #6c7b8b, #2c3e50);
+  // background: linear-gradient(to bottom, #d7dbdd, #2c3e50);
+  // background: linear-gradient(to bottom, #f9e79f, #2c3e50);
 }
 
 .message__user-img {
@@ -106,8 +109,12 @@
   flex-direction: column;
   background-color: #f2f2f2;
   min-width: 100px;
-  border-radius: 15px;
+  border-radius: 15px 15px 0px 15px;
   padding: 9px;
+}
+
+.message__text-text {
+  font-size: 18px;
 }
 
 .chat-title {

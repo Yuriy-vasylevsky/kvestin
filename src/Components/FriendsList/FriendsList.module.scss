@@ -18,6 +18,8 @@
 .flex {
   display: flex;
   align-items: center;
+  flex-basis: calc(90% - 15px);
+  overflow: hidden;
 }
 
 .list {
