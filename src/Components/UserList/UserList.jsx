@@ -7,6 +7,7 @@ import { setUserIdR } from '../../redux/friends/friends-slice';
 import { FaUserPlus, FaUserCheck } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import {
+  getDoc,
   collection,
   doc,
   addDoc,
@@ -21,6 +22,7 @@ const UserList = () => {
   const dispatch = useDispatch();
   const [users, setUsers] = useState([]);
   const [userId, setUserId] = useState('');
+  console.log('userId:', userId);
   const [friendEmail, setFriendEmail] = useState(
     localStorage.getItem(`friends_${currentUser.email}`)
       ? localStorage.getItem(`friends_${currentUser.email}`).split(',')
@@ -66,7 +68,7 @@ const UserList = () => {
       .catch(error => {
         console.error('Error getting documents: ', error);
       });
-  }, []);
+  }, [`${currentUser.email}`]);
 
   // добавляємо друзів для данного користувача
   const handleAddNewFriends = async otherUser => {
@@ -85,6 +87,7 @@ const UserList = () => {
     }
     // localStorage.setItem(`friends_${currentUser.email}`, friendEmail);
     setFriendEmail(state => [...state, otherUser.userEmail]);
+    // нарешті додаємо нового друга
     addDoc(friendsRef, {
       email: otherUser.userEmail || null,
       photo: otherUser.photo || null,
@@ -92,6 +95,8 @@ const UserList = () => {
       id: otherUser.id || null,
     });
   };
+  // записуємо всіх друзів для цьго акаунта в локал сторадж для того щоб відображати хто уже добавлений на цьму акауні
+  // і зберігати данні при виході зі сторінки чи перезагрузці
   localStorage.setItem(`friends_${currentUser.email}`, friendEmail);
 
   return (

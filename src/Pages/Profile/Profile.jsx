@@ -10,7 +10,9 @@ import imgGuest from '../../images/profile/1.jpg';
 import {
   collection,
   doc,
-  addDoc,
+  updateDoc,
+  // setDoc,
+  // addDoc,
   where,
   query,
   getDocs,
@@ -28,15 +30,17 @@ import { setUser } from '../../redux/auth/auth-slices';
 import { removeUser } from '../../redux/auth/auth-slices';
 import { removeChatId } from '../../redux/chat/chat-slice';
 import { removeUserId } from '../../redux/friends/friends-slice';
-import { setUserIdR } from '../../redux/friends/friends-slice';
+// import { setUserIdR } from '../../redux/friends/friends-slice';
 
 const Profile = () => {
   const [newName, setNewName] = useState('');
   const [newLabelName, setNewLabelName] = useState('Вибрати фото');
   const [file, setFile] = useState('');
   const [currentUser, setCurrentUser] = useState('');
+  console.log('currentUser:', currentUser);
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState('');
+  const [userRef, setUserRef] = useState(null);
   console.log('userId:', userId);
 
   const dispatch = useDispatch();
@@ -46,7 +50,18 @@ const Profile = () => {
   const auth = getAuth();
   const storage = getStorage();
 
-  // отримуємо id активного користувача
+  // Перевірка авторизації
+  useEffect(() => {
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        setCurrentUser(user);
+      } else {
+        navigate('/sing');
+      }
+    });
+  }, []);
+
+  //отримуємо id активного користувача
   const usersRef = collection(db, 'users');
 
   useEffect(() => {
@@ -58,44 +73,44 @@ const Profile = () => {
       .then(snapshot => {
         snapshot.forEach(doc => {
           const userId = doc.id;
+          // setUserRef(doc(usersRef, userId));
+
           setUserId(userId);
-          dispatch(
-            setUserIdR({
-              userId: userId,
-            }),
-          );
+          // dispatch(
+          //   setUserIdR({
+          //     userId: userId,
+          //   }),
+          // );
         });
       })
       .catch(error => {
         console.error('Error getting documents: ', error);
       });
-  }, []);
+  }, [`${currentUser.email}`]);
 
-  // Перевірка авторизації
-  useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        setCurrentUser(user);
-      } else {
-        navigate('/sing');
-      }
-    });
-  });
+  // if (userId) {
+  //   setUserRef(doc(usersRef, userId));
+  // } else {
+  //   console.log('userRef');
+  // }
 
   // Зміна імя
   const handleChangeName = e => {
     e.preventDefault();
-
+    const usersRef = collection(db, 'users');
     const userRef = doc(usersRef, userId);
-    console.log(userRef);
+
     const trimName = newName.trim();
 
     if (trimName) {
       updateProfile(currentUser, {
         displayName: trimName,
       }).then(() => {
-        userRef.update({
-          userEmail: 'yjhfv',
+        // userRef.setDoc({
+        //   userEmail: 'yjhfv',
+        // });
+        updateDoc(userRef, {
+          name: trimName,
         });
 
         setNewName('');
@@ -111,8 +126,12 @@ const Profile = () => {
     }
   };
 
+  // завантаження нового фото
   const handleFileUpload = e => {
     e.preventDefault();
+
+    const usersRef = collection(db, 'users');
+    const userRef = doc(usersRef, userId);
 
     const storageRef = ref(storage, 'myFiles/' + file.name);
 
@@ -132,7 +151,12 @@ const Profile = () => {
             updateProfile(currentUser, {
               photoURL: url,
             });
+
+            updateDoc(userRef, {
+              photo: url,
+            });
           });
+
           setNewLabelName('Завантажити');
           setIsLoading(false);
           setFile('');

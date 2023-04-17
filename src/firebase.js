@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
 // import { getFunctions } from 'firebase/functions';
 
 const firebaseConfig = {
@@ -20,6 +21,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const database = getDatabase(app);
 const auth = getAuth(app);
+const storage = getStorage(app);
 // const functions = getFunctions(app);
 
 // const getAllUsers = httpsCallable(functions, 'getAllUsers');
@@ -47,4 +49,4 @@ const auth = getAuth(app);
 //     console.log('error:', error);
 //   });
 
-export { db, app, database, auth };
+export { db, app, database, auth, storage };
