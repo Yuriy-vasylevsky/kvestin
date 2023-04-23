@@ -12,7 +12,8 @@ import { RiSendPlaneFill } from 'react-icons/ri';
 
 import { collection, doc, addDoc, serverTimestamp } from 'firebase/firestore';
 // import Button from '../Button/Button';
-import { db } from '../../firebase';
+import { db, storage } from '../../firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useSelector } from 'react-redux';
 
 export default function Footer({
@@ -24,6 +25,7 @@ export default function Footer({
   questions,
 }) {
   const [message, setMessage] = useState('');
+  const [image, setImage] = useState(null);
   const [messageQuestions, setMessageQuestions] = useState('');
   const { name, email } = useSelector(state => state.user);
 
@@ -66,19 +68,72 @@ export default function Footer({
     }
   };
 
-  const sendPhoto = async () => {
+  // const sendPhoto = async () => {
+  //   const chatsRef = collection(db, 'chats');
+  //   const chatRef = doc(chatsRef, chatId);
+  //   const messagesRef = collection(chatRef, 'messages');
+
+  //   await addDoc(messagesRef, {
+  //     text: 'Уяви що ти відправив картинку',
+  //     createdAt: serverTimestamp(),
+  //     // photo,
+  //     userName: name,
+  //     userEmail: email,
+  //   });
+  //   setMessageQuestions('');
+  // };
+
+  // Відправка фото в чат
+  const handleImageChange = event => {
+    if (event.target.files[0]) {
+      setImage(event.target.files[0]);
+    }
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+
+    if (image) {
+      uploadImage(image);
+    }
+
+    setImage(null);
+  };
+
+  const uploadImage = image => {
+    const imageName = image.name;
+    const imageRef = ref(storage, imageName);
+    const uploadTask = uploadBytesResumable(imageRef, image);
+
+    uploadTask.on(
+      'state_changed',
+      snapshot => {},
+      error => {
+        console.error(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+          // setImageUrl(downloadURL);
+          sendImage(downloadURL);
+        });
+      },
+    );
+  };
+
+  const sendImage = async downloadURL => {
     const chatsRef = collection(db, 'chats');
     const chatRef = doc(chatsRef, chatId);
     const messagesRef = collection(chatRef, 'messages');
 
     await addDoc(messagesRef, {
-      text: 'Уяви що ти відправив картинку',
+      photoUrl: downloadURL,
       createdAt: serverTimestamp(),
       // photo,
       userName: name,
       userEmail: email,
     });
-    setMessageQuestions('');
+
+    // setMessage('');
   };
 
   return (
@@ -102,7 +157,19 @@ export default function Footer({
             {message ? (
               <RiSendPlaneFill onClick={sendMessage} />
             ) : (
-              <FiImage onClick={sendPhoto} />
+              <form onSubmit={handleSubmit} className="input_file">
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                  className="form_file"
+                />
+                <FiImage />
+                {image && (
+                  <button type="submit" className="submit_btn">
+                    Send
+                  </button>
+                )}
+              </form>
             )}
           </IconContext.Provider>
         </div>

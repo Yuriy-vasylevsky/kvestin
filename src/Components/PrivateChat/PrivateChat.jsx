@@ -51,14 +51,20 @@ function PrivateChat({ chatId, otherUserEmail, otherUserName }) {
       <div className="chat-container">
         <div className="message-container" ref={chatContainerRef}>
           {messages.map(
-            ({ id, text, photo, userEmail, userName, createdAt }) => (
+            ({ id, text, photo, userEmail, photoUrl, userName, createdAt }) => (
               <div
                 key={id}
                 className={userEmail === email ? 'my-message' : 'user-message'}
               >
-                <div className="message__text">
-                  <p className="message__text-text">{text}</p>
-                </div>
+                {text && (
+                  <div className="message__text">
+                    <p className="message__text-text">{text}</p>
+                  </div>
+                )}
+
+                {photoUrl && (
+                  <img src={photoUrl} alt="" className="message_photo" />
+                )}
               </div>
             ),
           )}
