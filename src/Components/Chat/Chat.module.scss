@@ -231,3 +231,34 @@
   bottom: 0;
   left: 0;
 }
+
+.form_file {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  margin-left: 10px;
+  width: 30px;
+  height: 30px;
+  opacity: 0;
+  z-index: 100;
+  border: #ff014f;
+}
+
+.submit_btn {
+  position: fixed;
+  bottom: 19px;
+  right: 70px;
+  margin-top: 20px;
+  background: #ff014f;
+  border-bottom: 4px solid #ff014f;
+  color: white;
+  font-size: 14px;
+  display: block;
+  /* width: 100%; */
+  padding: 8px 18px;
+  /* line-height: 40px; */
+  border-width: 0;
+  border-radius: 20px;
+  cursor: pointer;
+  text-decoration: none;
+}

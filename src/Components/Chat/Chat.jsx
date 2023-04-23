@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import imgGuest from '../../images/profile/1.jpg';
 import { IconContext } from 'react-icons';
 
-// import { FiImage } from 'react-icons/fi';
+import { FiImage } from 'react-icons/fi';
 import { RiSendPlaneFill } from 'react-icons/ri';
 import {
   collection,
@@ -13,31 +13,27 @@ import {
   orderBy,
   onSnapshot,
 } from 'firebase/firestore';
-import { db, database, storage } from '../../firebase';
+import { db, storage } from '../../firebase';
 
 import s from './Chat.module.scss';
 //
 
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
-import { ref as dbRef, push, set, onValue } from 'firebase/database';
+// import { ref as dbRef, push, set, onValue } from 'firebase/database';
 
 //
 
 const Chat = () => {
-  const [message1, setMessage1] = useState('');
-  const [messageList, setMessageList] = useState([]);
-  const { photo, name, email } = useSelector(state => state.user);
-  const chatContainerRef = useRef(null);
-  //////////////////////////////////////////////////////////
-  //
-  //
-  //
-  //
   const [message, setMessage] = useState('');
-  console.log('message:', message);
+  const [messageList, setMessageList] = useState([]);
+  // const [imageUrl, setImageUrl] = useState(null);
   const [image, setImage] = useState(null);
 
+  const { photo, name, email } = useSelector(state => state.user);
+  const chatContainerRef = useRef(null);
+
+  // Відправка фото в чат
   const handleImageChange = event => {
     if (event.target.files[0]) {
       setImage(event.target.files[0]);
@@ -51,11 +47,6 @@ const Chat = () => {
       uploadImage(image);
     }
 
-    if (message) {
-      saveMessage(message);
-    }
-
-    setMessage('');
     setImage(null);
   };
 
@@ -72,57 +63,33 @@ const Chat = () => {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-          saveMessage(downloadURL);
+          // setImageUrl(downloadURL);
+          sendImage(downloadURL);
         });
       },
     );
   };
 
-  const saveMessage = message => {
-    console.log('message:', message);
-    const messageRef = push(dbRef(database, 'messages'));
-    set(messageRef, {
-      text: message,
+  const sendImage = async downloadURL => {
+    const messagesRef = collection(db, 'messages');
+
+    await addDoc(messagesRef, {
+      photoUrl: downloadURL,
+      createdAt: serverTimestamp(),
+      photo,
+      userName: name,
+      userEmail: email,
     });
+
+    // setMessage('');
   };
-  const messagesRef = dbRef(database, 'messages');
 
-  onValue(messagesRef, snapshot => {
-    const messages = snapshot.val();
-    console.log('messages:', messages);
-    // Відобразити нові повідомлення у чаті
-  });
-  // const saveMessage = message => {
-  //   console.log('message:', message);
-  //   const messageRef = push(dbRef(database, 'messages'));
-  //   messageRef.set({
-  //     text: message,
-  //     // timestamp: Date.now(),
-  //   });
-  // };
-
-  //
-
-  // const saveMessage = message => {
-  //   console.log('message:', message);
-  //   const messagesRef = dbRef(db, 'messages');
-  //   push(messagesRef).set({
-  //     text: message,
-  //     timestamp: Date.now(),
-  //   });
-  // };
-
-  //
-  //
-  //
-  //
-  //
-  ////////////////////////////////////////////////////////////////
+  // Відправка повідомлень
   const sendMessage = async () => {
     const messagesRef = collection(db, 'messages');
 
     await addDoc(messagesRef, {
-      text: message1,
+      text: message,
       createdAt: serverTimestamp(),
       photo,
       userName: name,
@@ -132,20 +99,7 @@ const Chat = () => {
     setMessage('');
   };
 
-  // const sendImage = async () => {
-  //   const messagesRef = collection(db, 'messages');
-
-  //   await addDoc(messagesRef, {
-  //     text: 'Уяви що я відправив фото ))',
-  //     createdAt: serverTimestamp(),
-  //     photo,
-  //     userName: name,
-  //     userEmail: email,
-  //   });
-
-  //   setMessage('');
-  // };
-
+  // автоскрол в низ до нових повідомлень
   function scrollToBottom() {
     chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
   }
@@ -154,8 +108,9 @@ const Chat = () => {
     scrollToBottom();
   }, [messageList]);
 
+  // Відображення нових повідомлень
+
   useEffect(() => {
-    //ccилка на колекцію данних
     const messagesRef = collection(db, 'messages');
     const q = query(messagesRef, orderBy('createdAt'));
 
@@ -177,7 +132,7 @@ const Chat = () => {
     <div className={s.chat_container}>
       <div className={s.message_container} ref={chatContainerRef}>
         {messageList.map(
-          ({ id, text, photo, userEmail, userName, createdAt }) => (
+          ({ id, text, photo, userEmail, userName, photoUrl, createdAt }) => (
             <div
               key={id}
               className={` ${
@@ -190,7 +145,6 @@ const Chat = () => {
                   alt=""
                   className={s.message__user_img}
                 />
-                {/* <p className={s.message__user_name}>{userName}</p> */}
               </div>
               <div className={s.flex}>
                 <p className={s.message__user_name}>
@@ -198,7 +152,8 @@ const Chat = () => {
                 </p>
                 <div className={s.message__text}>
                   <p className={s.message__text_text}>{text}</p>
-                  {/* <p className="message__text-date">{createdAt.seconds}</p> */}
+
+                  {photoUrl && <img src={photoUrl} alt="" />}
                 </div>
               </div>
             </div>
@@ -209,27 +164,28 @@ const Chat = () => {
       <input
         className={s.input_field}
         type="text"
-        value={message1}
-        onChange={e => setMessage1(e.target.value)}
+        value={message}
+        onChange={e => setMessage(e.target.value)}
         placeholder="Повідомлення"
       />
-      {/* <button onClick={sendMessage} className="send-button">
-        Send
-      </button> */}
+
       <IconContext.Provider value={{ className: 'chatIcon_send' }}>
         {message ? (
           <RiSendPlaneFill onClick={sendMessage} />
         ) : (
-          // <FiImage onClick={sendImage} />
           // Відправка фото в чат
           <form onSubmit={handleSubmit} className={s.input_file}>
             <input
-              type="text"
-              value={message}
-              onChange={e => setMessage(e.target.value)}
+              type="file"
+              onChange={handleImageChange}
+              className={s.form_file}
             />
-            <input type="file" onChange={handleImageChange} />
-            <button type="submit">Send</button>
+            <FiImage />
+            {image && (
+              <button type="submit" className={s.submit_btn}>
+                Send
+              </button>
+            )}
           </form>
         )}
       </IconContext.Provider>
