@@ -150,11 +150,16 @@ const Chat = () => {
                 <p className={s.message__user_name}>
                   {userName ? userName : userEmail}
                 </p>
-                <div className={s.message__text}>
-                  <p className={s.message__text_text}>{text}</p>
 
-                  {photoUrl && <img src={photoUrl} alt="" />}
-                </div>
+                {text && (
+                  <div className={s.message__text}>
+                    <p className={s.message__text_text}>{text}</p>
+                  </div>
+                )}
+
+                {photoUrl && (
+                  <img src={photoUrl} alt="" className={s.message__photo} />
+                )}
               </div>
             </div>
           ),

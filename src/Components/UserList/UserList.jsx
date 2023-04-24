@@ -7,7 +7,7 @@ import { setUserIdR } from '../../redux/friends/friends-slice';
 import { FaUserPlus, FaUserCheck } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import {
-  getDoc,
+  // getDoc,
   collection,
   doc,
   addDoc,
@@ -22,7 +22,9 @@ const UserList = () => {
   const dispatch = useDispatch();
   const [users, setUsers] = useState([]);
   const [userId, setUserId] = useState('');
-  console.log('userId:', userId);
+
+  // const [friendEmail, setFriendEmail] = useState([]);
+  // console.log('friendEmail:', friendEmail);
   const [friendEmail, setFriendEmail] = useState(
     localStorage.getItem(`friends_${currentUser.email}`)
       ? localStorage.getItem(`friends_${currentUser.email}`).split(',')
@@ -68,7 +70,30 @@ const UserList = () => {
       .catch(error => {
         console.error('Error getting documents: ', error);
       });
-  }, [`${currentUser.email}`]);
+  }, [currentUser.email, dispatch, usersRef]);
+
+  // Отримуємо список друзів для данного акк
+
+  useEffect(() => {
+    const getFriends = async () => {
+      // const usersRef = collection(db, 'users');
+      // const userRef = doc(usersRef, userId);
+      // const friendsRef = collection(userRef, 'friends');
+
+      if (userId) {
+        const usersRef = collection(db, 'users');
+        const userRef = doc(usersRef, userId);
+        const friendsRef = collection(userRef, 'friends');
+        const querySnapshot = await getDocs(friendsRef);
+        const userList = querySnapshot.docs
+          .map(doc => doc.data().email)
+          .filter(user => user.id !== currentUser.id);
+        setFriendEmail(userList);
+      }
+    };
+    getFriends();
+    localStorage.setItem(`friends_${currentUser.email}`, friendEmail);
+  }, [currentUser.email, currentUser.id, friendEmail, userId]);
 
   // добавляємо друзів для данного користувача
   const handleAddNewFriends = async otherUser => {
@@ -86,7 +111,7 @@ const UserList = () => {
       return;
     }
     // localStorage.setItem(`friends_${currentUser.email}`, friendEmail);
-    setFriendEmail(state => [...state, otherUser.userEmail]);
+    // setFriendEmail(state => [...state, otherUser.userEmail]);
     // нарешті додаємо нового друга
     addDoc(friendsRef, {
       email: otherUser.userEmail || null,
@@ -97,7 +122,7 @@ const UserList = () => {
   };
   // записуємо всіх друзів для цьго акаунта в локал сторадж для того щоб відображати хто уже добавлений на цьму акауні
   // і зберігати данні при виході зі сторінки чи перезагрузці
-  localStorage.setItem(`friends_${currentUser.email}`, friendEmail);
+  // localStorage.setItem(`friends_${currentUser.email}`, friendEmail);
 
   return (
     <div className={s.container}>

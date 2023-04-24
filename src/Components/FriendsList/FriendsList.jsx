@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase';
 import s from './FriendsList.module.scss';
 import imgGuest from '../../images/profile/1.jpg';
-import Button from '../Button/Button';
+// import Button from '../Button/Button';
 import { IconContext } from 'react-icons';
 import { BsChatDotsFill, BsChatHeart } from 'react-icons/bs';
+import { FaUserTimes } from 'react-icons/fa';
 import { setChatIdR } from '../../redux/chat/chat-slice';
 import { setUserIdR } from '../../redux/friends/friends-slice';
 import {
+  deleteDoc,
   collection,
   doc,
   setDoc,
@@ -18,7 +20,6 @@ import {
 } from 'firebase/firestore';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
 const UserList = () => {
   const currentUser = useSelector(state => state.user);
   const currentUserId = useSelector(state => state.userId);
@@ -30,6 +31,9 @@ const UserList = () => {
   );
 
   const [users, setUsers] = useState([]);
+  console.log('users:', users);
+
+  // отримуємо список друзів
   useEffect(() => {
     if (currentUserId.userId) {
       const getUsers = async () => {
@@ -69,7 +73,7 @@ const UserList = () => {
       .catch(error => {
         console.error('Error getting documents: ', error);
       });
-  }, []);
+  }, [currentUser.email, dispatch, usersRef]);
 
   // відкриваємо приватний чат з вибраним користувачем
   const chatsRef = collection(db, 'chats');
@@ -125,6 +129,31 @@ const UserList = () => {
     }
   };
 
+  // видалення друга
+
+  const deleteFriend = async friendId => {
+    try {
+      const usersRef = collection(db, 'users');
+      const userRef = doc(usersRef, currentUserId.userId);
+      const friendsRef = collection(userRef, 'friends');
+
+      const querySnapshot = await getDocs(friendsRef);
+      const friendDocs = querySnapshot.docs;
+      const friendDoc = friendDocs.find(doc => doc.data().id === friendId);
+
+      if (friendDoc) {
+        const friendDocRef = doc(friendsRef, friendDoc.id);
+        await deleteDoc(friendDocRef);
+        setUsers(users.filter(user => user.id !== friendId));
+        console.log('Friend deleted successfully');
+      } else {
+        console.error('Friend not found in Firestore');
+      }
+    } catch (error) {
+      console.error('Error removing friend: ', error);
+    }
+  };
+
   return (
     <div className={s.container}>
       <h2 className={s.title}>Ваші друзі</h2>
@@ -156,6 +185,9 @@ const UserList = () => {
               clasName={selectedUserId !== id ? 'userlistBtn' : 'div'}
               type={'button'}
             /> */}
+            <IconContext.Provider value={{ className: 'delete-friend-icon' }}>
+              <FaUserTimes onClick={() => deleteFriend(id)} />
+            </IconContext.Provider>
 
             {selectedUserId === id ? (
               <IconContext.Provider
