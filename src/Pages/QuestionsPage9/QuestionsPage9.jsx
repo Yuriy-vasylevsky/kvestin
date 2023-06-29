@@ -11,15 +11,15 @@ import InfoPage from '../InfoPage/InfoPage';
 import Section from '../../Components/Section/Section ';
 import PrivateChat from '../../Components/PrivateChat/PrivateChat';
 
-import { questions3 } from '../../data/questions3';
+import { questions9 } from '../../data/questions9';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export default function QuestionsPage_1() {
   const [usedNumbers, setUsedNumbers] = useState(
-    localStorage.getItem(`questions3`)
+    localStorage.getItem(`questions9`)
       ? localStorage
-          .getItem(`questions3`)
+          .getItem(`questions9`)
           .split(',')
           .map(function (item) {
             return parseInt(item, 10);
@@ -44,7 +44,7 @@ export default function QuestionsPage_1() {
 
       if (usedNumbers.indexOf(rundomNumber) === -1) {
         setUsedNumbers(prev => [...prev, rundomNumber]);
-        localStorage.setItem(`questions3`, usedNumbers);
+        localStorage.setItem(`questions9`, usedNumbers);
         return rundomNumber;
       } else if (usedNumbers.length === max) {
         setUsedNumbers([]);
@@ -62,7 +62,7 @@ export default function QuestionsPage_1() {
 
     setLoading(true);
     setTimeout(() => {
-      setQuestions(questions3[rundomaizer(questions3.length)]);
+      setQuestions(questions9[rundomaizer(questions9.length)]);
       setLoading(false);
     }, 500);
     setQuestions('');

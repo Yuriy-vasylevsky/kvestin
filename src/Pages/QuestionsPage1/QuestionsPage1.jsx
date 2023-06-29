@@ -1,44 +1,40 @@
+/* eslint-disable no-loop-func */
 import s from './QuestionsPage1.module.scss';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Container from '../../Components/Container/Container';
 import Footer from '../../Components/Footer/Footer';
-// import Loading from '../../Components/Loading/Loading';
 import Loader from '../../Components/Loader/Loader';
 import QuestionBox from '../../Components/QuestionBox/QuestionBox';
-import InfoPage from '../../Pages/InfoPage/InfoPage';
+import InfoPage from '../InfoPage/InfoPage';
 import Section from '../../Components/Section/Section ';
 import PrivateChat from '../../Components/PrivateChat/PrivateChat';
+
 import { questions1 } from '../../data/questions1';
 import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
-// import { auth } from '../../firebase';
-import { db } from '../../firebase';
-import { collection, doc, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function QuestionsPage_1() {
-  const [usedNumbers, setUsedNumbers] = useState([]);
+  const [usedNumbers, setUsedNumbers] = useState(
+    localStorage.getItem(`questions1`)
+      ? localStorage
+          .getItem(`questions1`)
+          .split(',')
+          .map(function (item) {
+            return parseInt(item, 10);
+          })
+      : [],
+  );
+
   const [questions, setQuestions] = useState('');
   const [loading, setLoading] = useState(false);
-  const [counter, setCounter] = useState(0);
-  // const [message, setMessage] = useState('');
 
   const { chatId, otherUserEmail, otherUserName } = useSelector(
     state => state.chat,
   );
-  // const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   auth.onAuthStateChanged(user => {
-  //     if (user) {
-  //       return;
-  //     } else {
-  //       navigate('/sing');
-  //     }
-  //   });
-  // });
+  // Рандомайзер для отримання випадкового числа що не повторюється
 
   const rundomaizer = max => {
     let rundomNumber;
@@ -48,14 +44,18 @@ export default function QuestionsPage_1() {
 
       if (usedNumbers.indexOf(rundomNumber) === -1) {
         setUsedNumbers(prev => [...prev, rundomNumber]);
+        localStorage.setItem(`questions1`, usedNumbers);
         return rundomNumber;
       } else if (usedNumbers.length === max) {
-        return toast('Вы выжали максимум с этой категории вопросов');
+        setUsedNumbers([]);
+        return toast('Ви пройшли всі запитання. Починаємо все з початку.');
       }
     }
   };
 
-  const onClik = () => {
+  // Вибираємо рандомне запитання
+
+  const changeQuestion = () => {
     if (loading) {
       return;
     }
@@ -64,36 +64,8 @@ export default function QuestionsPage_1() {
     setTimeout(() => {
       setQuestions(questions1[rundomaizer(questions1.length)]);
       setLoading(false);
-      // setHistoryQuestion(prev => [...prev, questions]);
-    }, 1000);
+    }, 500);
     setQuestions('');
-    setCounter(prev => prev + 1);
-  };
-
-  // const cleanOll = () => {
-  //   setQuestions('');
-  //   setCounter(0);
-  //   setUsedNumbers([]);
-  // };
-
-  const sendQuestions = async () => {
-    const chatsRef = collection(db, 'chats');
-    const chatRef = doc(chatsRef, chatId);
-    const messagesRef = collection(chatRef, 'messages');
-
-    if (questions) {
-      await addDoc(messagesRef, {
-        text: questions,
-        createdAt: serverTimestamp(),
-        // photo,
-        // userName: name,
-        // userEmail: email,
-      });
-      setQuestions('');
-    } else {
-      console.log('gecnj');
-      return;
-    }
   };
 
   return (
@@ -121,9 +93,7 @@ export default function QuestionsPage_1() {
       </main>
       <Footer
         chatId={chatId}
-        counter={counter}
-        onClik={onClik}
-        cleanOll={sendQuestions}
+        changeQuestion={changeQuestion}
         questions={questions}
       />
 

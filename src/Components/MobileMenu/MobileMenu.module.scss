@@ -3,7 +3,7 @@
   font-weight: 700;
   font-size: 25px;
   line-height: 1.22;
-  color: #626770;
+  color: var(--main-text-color);
   text-decoration: none;
   margin-bottom: 20px;
   font-family: 'Great Vibes', cursive;
@@ -11,7 +11,7 @@
 
 .logoRed {
   font-size: 40px;
-  color: #ff014f;
+  color: var(--main-accente-color);
   font-family: 'Great Vibes', cursive;
 }
 
@@ -57,7 +57,7 @@
   font-weight: 700;
   font-size: 16px;
   line-height: 1.22;
-  color: #cedff6;
+  color: var(--main-text-color);
   text-decoration: none;
   padding-bottom: 10px;
   // padding-left: 20px;
@@ -74,7 +74,7 @@
   font-weight: 700;
   font-size: 16px;
   line-height: 1.22;
-  color: #cedff6;
+  color: var(--main-text-color);
   text-decoration: none;
   margin-bottom: 15px;
 }

@@ -27,6 +27,7 @@ export default function AppBar() {
             <span className={s.logoRed}>K</span>
             <span className={s.logo__text}>vestin</span>
           </Link>
+
           {!user.email ? (
             <div className={s.auth__box}>
               <Link to="sing" className={s.text}>
@@ -37,7 +38,7 @@ export default function AppBar() {
               </Link>
             </div>
           ) : (
-            <div className={s.flex}>
+            <div className={s.navigation}>
               <Link to="/users" className={s.link}>
                 {' '}
                 Усі користувачі
@@ -73,24 +74,27 @@ export default function AppBar() {
               </div>
             </div>
           )}
+
           {user.email && (
-            <IconContext.Provider value={{ className: 'icons' }}>
-              <Link to="/info" className={s.link}>
-                <BsFillPatchQuestionFill />
-              </Link>
+            <nav className={s.mobile_nav}>
+              <IconContext.Provider value={{ className: 'icons' }}>
+                <Link to="/info" className={s.link}>
+                  <BsFillPatchQuestionFill />
+                </Link>
 
-              <Link to="/chat" className={s.link}>
-                <TiMessages />
-              </Link>
+                <Link to="/chat" className={s.link}>
+                  <TiMessages />
+                </Link>
 
-              <Link to="/users" className={s.link}>
-                <FaUserFriends />
-              </Link>
+                <Link to="/users" className={s.link}>
+                  <FaUserFriends />
+                </Link>
 
-              <Link to="/profile" className={s.link}>
-                <FaUserCircle />
-              </Link>
-            </IconContext.Provider>
+                <Link to="/profile" className={s.link}>
+                  <FaUserCircle />
+                </Link>
+              </IconContext.Provider>
+            </nav>
           )}
 
           {isOpen && <MobileMenu onChange={handleStateChange} />}

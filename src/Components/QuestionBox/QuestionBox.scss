@@ -18,7 +18,7 @@
 .box-section-hero__title {
   position: fixed;
   top: 140px;
-  color: #ffffff;
+  color: var(--second-text-color);
   padding-bottom: 15px;
   text-align: center;
 
@@ -37,8 +37,8 @@
     width: 90%;
     min-height: 120px;
     border-radius: 30px;
-    // border: solid 1px #ff014f;
-    background: #23252b;
+
+    background: var(--second-bg-color);
     box-shadow: -4px 4px 18px rgba(0, 0, 0, 0.43);
     border-radius: 10px;
     margin: 0 auto 20px auto;

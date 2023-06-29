@@ -1,91 +1,103 @@
-// // import s from './QuestionsPage_1.module.scss';
+/* eslint-disable no-loop-func */
 
-// import Container from '../../Components/Container/Container';
-// import Footer from '../../Components/Footer/Footer';
-// import Loading from '../../Components/Loading/Loading';
-// import QuestionBox from '../../Components/QuestionBox/QuestionBox';
-// // import QuestionBoxHistory from '../../Components/Chat.js/Chat';
-// import Section from '../../Components/Section/Section ';
-// import { questions4 } from '../../data/questions4';
-// import { useState } from 'react';
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// import { useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { auth } from '../../firebase';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-// export default function QuestionsPage_1() {
-//   const [usedNumbers, setUsedNumbers] = useState([]);
-//   const [questions, setQuestions] = useState('');
-//   const [loading, setLoading] = useState(false);
-//   const [counter, setCounter] = useState(0);
-//   const [historyQuestion, setHistoryQuestion] = useState([]);
-//   const navigate = useNavigate();
+import Container from '../../Components/Container/Container';
+import Footer from '../../Components/Footer/Footer';
+import Loader from '../../Components/Loader/Loader';
+import QuestionBox from '../../Components/QuestionBox/QuestionBox';
+import InfoPage from '../InfoPage/InfoPage';
+import Section from '../../Components/Section/Section ';
+import PrivateChat from '../../Components/PrivateChat/PrivateChat';
 
-//   const rundomaizer = max => {
-//     let rundomNumber;
+import { questions4 } from '../../data/questions4';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-//     while (usedNumbers.length <= max) {
-//       rundomNumber = Math.floor(Math.random() * max);
+export default function QuestionsPage_1() {
+  const [usedNumbers, setUsedNumbers] = useState(
+    localStorage.getItem(`questions4`)
+      ? localStorage
+          .getItem(`questions4`)
+          .split(',')
+          .map(function (item) {
+            return parseInt(item, 10);
+          })
+      : [],
+  );
 
-//       if (usedNumbers.indexOf(rundomNumber) === -1) {
-//         setUsedNumbers(prev => [...prev, rundomNumber]);
-//         return rundomNumber;
-//       } else if (usedNumbers.length === max) {
-//         return toast('Вы выжали максимум с этой категории вопросов');
-//       }
-//     }
-//   };
+  const [questions, setQuestions] = useState('');
+  const [loading, setLoading] = useState(false);
 
-//   useEffect(() => {
-//     auth.onAuthStateChanged(user => {
-//       if (user) {
-//         return;
-//       } else {
-//         navigate('/sing');
-//       }
-//     });
-//   });
+  const { chatId, otherUserEmail, otherUserName } = useSelector(
+    state => state.chat,
+  );
 
-//   const onClik = () => {
-//     if (loading) {
-//       return;
-//     }
+  // Рандомайзер для отримання випадкового числа що не повторюється
 
-//     setLoading(true);
-//     setTimeout(() => {
-//       setQuestions(questions4[rundomaizer(questions4.length)]);
-//       setLoading(false);
-//       setHistoryQuestion(prev => [...prev, questions]);
-//     }, 1000);
-//     setQuestions('');
-//     setCounter(prev => prev + 1);
-//   };
+  const rundomaizer = max => {
+    let rundomNumber;
 
-//   const cleanOll = () => {
-//     setQuestions('');
-//     setHistoryQuestion('');
-//     setCounter(0);
-//     setUsedNumbers([]);
-//   };
+    while (usedNumbers.length <= max) {
+      rundomNumber = Math.floor(Math.random() * max);
 
-//   return (
-//     <>
-//       <main className="main">
-//         <Container>
-//           {loading && <Loading />}
-//           <Section className={'section-hero'}>
-//             <QuestionBox
-//               questions={questions}
-//               title={'Пошлые вопросы к парням'}
-//             />
-//             <QuestionBoxHistory historyQuestion={historyQuestion} />
-//           </Section>
-//         </Container>
-//       </main>
+      if (usedNumbers.indexOf(rundomNumber) === -1) {
+        setUsedNumbers(prev => [...prev, rundomNumber]);
+        localStorage.setItem(`questions4`, usedNumbers);
+        return rundomNumber;
+      } else if (usedNumbers.length === max) {
+        setUsedNumbers([]);
+        return toast('Ви пройшли всі запитання. Починаємо все з початку.');
+      }
+    }
+  };
 
-//       <Footer counter={counter} onClik={onClik} cleanOll={cleanOll} />
-//       <ToastContainer />
-//     </>
-//   );
-// }
+  // Вибираємо рандомне запитання
+
+  const changeQuestion = () => {
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+    setTimeout(() => {
+      setQuestions(questions4[rundomaizer(questions4.length)]);
+      setLoading(false);
+    }, 500);
+    setQuestions('');
+  };
+
+  return (
+    <>
+      <main className="main">
+        <Container>
+          {chatId && (
+            <Section className={'section-hero'}>
+              {loading && <Loader />}
+              <QuestionBox questions={questions} title={'Обычние вопросы'} />
+            </Section>
+          )}
+
+          {chatId ? (
+            <PrivateChat
+              chatId={chatId}
+              otherUserEmail={otherUserEmail}
+              questions={questions}
+              otherUserName={otherUserName}
+            />
+          ) : (
+            <InfoPage />
+          )}
+        </Container>
+      </main>
+      <Footer
+        chatId={chatId}
+        changeQuestion={changeQuestion}
+        questions={questions}
+      />
+
+      <ToastContainer />
+    </>
+  );
+}

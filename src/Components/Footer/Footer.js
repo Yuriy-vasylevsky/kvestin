@@ -19,7 +19,7 @@ import { useSelector } from 'react-redux';
 export default function Footer({
   chatId,
   counter,
-  onClik,
+  changeQuestion,
   cleanOll,
   handleStateChange,
   questions,
@@ -141,7 +141,7 @@ export default function Footer({
       <Container>
         <div className="section-footer-btn">
           <IconContext.Provider value={{ className: 'icon-send-questions' }}>
-            <BsFillChatRightHeartFill onClick={onClik} />
+            <BsFillChatRightHeartFill onClick={changeQuestion} />
             <BsFillArrowThroughHeartFill onClick={sendQuestions} />
           </IconContext.Provider>
 

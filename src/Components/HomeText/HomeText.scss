@@ -1,12 +1,12 @@
 .top {
-  background: #212428;
+  background: var(--main-bg-color);
 
   &_text {
     font-size: 15px;
     line-height: 1.1;
     margin-top: 10px;
 
-    color: #989ca2;
+    color: var(--main-text-color);
     overflow: hidden;
     // max-height: 100px;
   }
@@ -17,7 +17,7 @@
     font-size: 20px;
     line-height: 1.5;
     // text-transform: capitalize;
-    color: #cedff6;
+    color: var(--main-text-color);
     text-align: center;
     padding-bottom: 15px;
   }
@@ -34,10 +34,10 @@
   font-size: 15px;
   line-height: 1.2;
   letter-spacing: 0.14em;
-  background: #212428;
-  border: 1px solid #ff014f;
+  background: var(--main-bg-color);
+  border: 1px solid var(--main-accente-color);
   box-sizing: border-box;
   border-radius: 30px;
   padding: 5px 15px 5px 15px;
-  color: aliceblue;
+  color: var(--main-text-color);
 }

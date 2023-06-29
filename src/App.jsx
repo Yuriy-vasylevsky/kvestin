@@ -30,6 +30,23 @@ const QuestionsPage3 = React.lazy(() =>
 const QuestionsPage4 = React.lazy(() =>
   import('./Pages/QuestionsPage4/QuestionsPage4'),
 );
+
+const QuestionsPage5 = React.lazy(() =>
+  import('./Pages/QuestionsPage5/QuestionsPage5'),
+);
+
+const QuestionsPage6 = React.lazy(() =>
+  import('./Pages/QuestionsPage6/QuestionsPage6'),
+);
+const QuestionsPage7 = React.lazy(() =>
+  import('./Pages/QuestionsPage7/QuestionsPage7'),
+);
+const QuestionsPage8 = React.lazy(() =>
+  import('./Pages/QuestionsPage8/QuestionsPage8'),
+);
+const QuestionsPage9 = React.lazy(() =>
+  import('./Pages/QuestionsPage9/QuestionsPage9'),
+);
 const Layouts = React.lazy(() => import('./Components/Layouts/Layouts'));
 
 const Loading = React.lazy(() => import('./Components/Loading/Loading'));
@@ -57,6 +74,11 @@ export default function App() {
             <Route path="/q2" element={<QuestionsPage2 />} />
             <Route path="/q3" element={<QuestionsPage3 />} />
             <Route path="/q4" element={<QuestionsPage4 />} />
+            <Route path="/q5" element={<QuestionsPage5 />} />
+            <Route path="/q6" element={<QuestionsPage6 />} />
+            <Route path="/q7" element={<QuestionsPage7 />} />
+            <Route path="/q8" element={<QuestionsPage8 />} />
+            <Route path="/q9" element={<QuestionsPage9 />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/sing" element={<SingIn />} />

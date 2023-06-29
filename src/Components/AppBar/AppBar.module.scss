@@ -3,14 +3,14 @@
   font-weight: 700;
   font-size: 25px;
   line-height: 1.22;
-  color: #626770;
+  color: var(--main-text-color);
   text-decoration: none;
 }
 
 .logoRed {
   font-family: 'Great Vibes', cursive;
   font-size: 40px;
-  color: #ff014f;
+  color: var(--main-accente-color);
 }
 
 // .logo__text {
@@ -26,11 +26,11 @@
   right: 0;
   padding-top: 15px;
   padding-bottom: 15px;
-  background: #212428;
+  background: var(--main-bg-color);
   box-shadow: 0px 7px 13px rgba(0, 0, 0, 0.17);
   z-index: 111;
 
-  @media screen and (max-width: 420px) {
+  @media screen and (max-width: 480px) {
     padding-top: 5px;
     padding-bottom: 5px;
   }
@@ -42,12 +42,23 @@
   justify-content: space-between;
 }
 
-.flex {
+.navigation {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  @media screen and (max-width: 420px) {
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
+}
+
+.mobile_nav {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 30px;
+
+  @media screen and (min-width: 600px) {
     display: none;
   }
 }
@@ -73,7 +84,7 @@
   font-weight: 700;
   font-size: 16px;
   line-height: 1.22;
-  color: #cedff6;
+  color: var(--main-text-color);
   text-decoration: none;
   padding-bottom: 10px;
   // padding-left: 20px;
@@ -87,10 +98,10 @@
 }
 
 .link {
-  // margin-right: 20px;
+  margin-right: 20px;
   font-weight: 700;
   font-size: 16px;
   line-height: 1.22;
-  color: #cedff6;
+  color: var(--main-text-color);
   text-decoration: none;
 }

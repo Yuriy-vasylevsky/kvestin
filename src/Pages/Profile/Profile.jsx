@@ -5,7 +5,7 @@ import FriendsList from '../../Components/FriendsList/FriendsList';
 import Button from '../../Components/Button/Button';
 // import { IconContext } from 'react-icons';
 // import { RiUploadCloud2Fill } from 'react-icons/ri';
-import MagikCard from '../../Components/MagikCard/MagikCard';
+// import MagikCard from '../../Components/MagikCard/MagikCard';
 import imgGuest from '../../images/profile/1.jpg';
 import {
   collection,
@@ -19,7 +19,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../firebase';
 
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -40,7 +40,7 @@ const Profile = () => {
   console.log('currentUser:', currentUser);
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState('');
-  const [userRef, setUserRef] = useState(null);
+  // const [userRef, setUserRef] = useState(null);
   console.log('userId:', userId);
 
   const dispatch = useDispatch();
@@ -59,7 +59,7 @@ const Profile = () => {
         navigate('/sing');
       }
     });
-  }, []);
+  }, [auth, navigate]);
 
   //отримуємо id активного користувача
   const usersRef = collection(db, 'users');
@@ -86,7 +86,7 @@ const Profile = () => {
       .catch(error => {
         console.error('Error getting documents: ', error);
       });
-  }, [`${currentUser.email}`]);
+  }, [currentUser.email, usersRef]);
 
   // if (userId) {
   //   setUserRef(doc(usersRef, userId));
@@ -266,7 +266,7 @@ const Profile = () => {
         <FriendsList />
         {/* <MagikCard /> */}
       </Container>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </>
   );
 };

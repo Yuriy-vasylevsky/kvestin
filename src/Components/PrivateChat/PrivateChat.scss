@@ -6,9 +6,9 @@
   background-color: transparent;
   border: none;
   margin-right: 10px;
-  border-bottom: #ff014f solid 1px;
+  border-bottom: var(--main-accente-color) solid 1px;
   outline: none;
-  color: #cedff6;
+  color: var(--main-text-color);
   font-size: 16px;
   margin-bottom: 5px;
   min-width: 140px;
@@ -19,7 +19,6 @@
 }
 
 .message-container {
-  // border: #005e7d solid 1px;
   position: fixed;
   top: 162px;
   bottom: 58px;
@@ -62,7 +61,7 @@
   justify-content: center;
   align-items: start;
   flex-direction: column;
-  background-color: #f2f2f2;
+  background-color: var(--second-text-color);
   min-width: 100px;
   border-radius: 15px 15px 0px 15px;
   padding: 9px;
@@ -80,13 +79,11 @@
 }
 
 .my-message .message__user {
-  // color: rgb(0, 0, 0);
   margin-left: 10px;
   margin-right: 0;
 }
 
 .my-message .message__text {
-  // color: rgb(0, 0, 0);
   background: linear-gradient(to bottom, #add8e6, #87cefa);
 }
 
@@ -113,7 +110,7 @@
   position: fixed;
   top: 68px;
   font-size: 20px;
-  color: #cedff6;
+  color: var(--main-text-color);
 }
 
 .message_photo {

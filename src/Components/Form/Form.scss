@@ -6,7 +6,7 @@
   position: relative;
   max-width: 400px;
   margin: 50px auto 0;
-  background: white;
+  background: var(--second-text-color);
   border-radius: 30px;
 
   @media screen and (max-width: 420px) {
@@ -24,17 +24,20 @@
   position: absolute;
   width: 50px;
   height: 20px;
-  background: #ff014f;
+  background: var(--main-accente-color);
   border-radius: 20px;
 }
+
 .form-left-decoration {
   bottom: 60px;
   left: -30px;
 }
+
 .form-right-decoration {
   top: 60px;
   right: -30px;
 }
+
 .form-left-decoration:before,
 .form-left-decoration:after,
 .form-right-decoration:before,
@@ -44,23 +47,28 @@
   width: 50px;
   height: 20px;
   border-radius: 30px;
-  background: white;
+  background: var(--second-text-color);
 }
+
 .form-left-decoration:before {
   top: -20px;
 }
+
 .form-left-decoration:after {
   top: 20px;
   left: 10px;
 }
+
 .form-right-decoration:before {
   top: -20px;
   right: 0;
 }
+
 .form-right-decoration:after {
   top: 20px;
   right: 10px;
 }
+
 .circle {
   position: absolute;
   bottom: 80px;
@@ -68,8 +76,9 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: white;
+  background: var(--second-text-color);
 }
+
 .form-inner {
   padding: 50px;
 
@@ -77,28 +86,32 @@
     padding: 10px;
   }
 }
+
 .form-inner input,
 .form-inner textarea {
   display: block;
   width: 100%;
   padding: 0 20px;
   margin-bottom: 10px;
-  background: #e9eff6;
+  background: var(--second-text-color);
   line-height: 40px;
   border-width: 0;
   border-radius: 20px;
   font-family: 'Roboto', sans-serif;
 }
+
 .form-inner input[type='submit'] {
   margin-top: 30px;
-  background: #ff014f;
-  border-bottom: 4px solid #ff014f;
-  color: white;
+  background: var(--main-accente-color);
+  border-bottom: 4px solid var(--main-accente-color);
+  color: var(--second-text-color);
   font-size: 14px;
 }
+
 .form-inner textarea {
   resize: none;
 }
+
 .form-inner h3 {
   margin-top: 0;
   font-family: 'Roboto', sans-serif;
